@@ -242,8 +242,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     alignItems: 'center', 
-    marginTop: 50, 
-    marginBottom: 20
+    marginBottom: 40,
+    ...Platform.select({
+      ios: {
+        marginTop: 50, 
+       
+      }, 
+      android:{
+        marginTop: 20, 
+      }
+    })
   }, 
   leftTopContainer: {
     justifyContent: 'flex-start', 
