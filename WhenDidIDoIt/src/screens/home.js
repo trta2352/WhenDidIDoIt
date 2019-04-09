@@ -5,15 +5,15 @@ import {
   StyleSheet, 
   Alert, 
   FlatList, 
-  Platform
-
+  Platform, 
+  TouchableOpacity
 } from 'react-native'
 import { Icon, ListItem } from 'react-native-elements';
 import Image from 'react-native-remote-svg'
-
 import AddBtn from '../components/buttons/addBtn.js'
-
 import Reminderlist from '../components/list/reminderList.js'
+
+import DBManager from '../utils/dbManager.js'
 
 class Home extends Component {
   
@@ -43,12 +43,47 @@ class Home extends Component {
           whenDidIDoIt: '14.3.2019 14:00', 
           whenShouldIDoItAgain: '14.4.2019 14:00'
         }
-      ]
+      ], 
+      realData: []
     }
+  }
+
+  updatedData(){
+   // this.setState({realData: []})
+    (async () => {
+      let temp = await DBManager.getAll()
+      if(temp != false){
+        this.setState({realData: temp})
+      }
+      else{
+        this.setState({
+          realData: this.state.data
+        })
+      }
+    })();
+  }
+
+  componentDidMount = () =>{
+   this.updatedData();
+
+    this.willFocusSubscription = this.props.navigation.addListener(
+      'willFocus',
+      () => {
+        this.updatedData();
+      }
+    );
+  }
+
+  componentDidMount() {
+    this.willFocusSubscription.remove();
+  }
+
+  componentWillUnmount() {
+    this.willFocusSubscription.remove();
   }
   
   addBtnPressed(){
-
+    this.props.navigation.navigate('AddReminder');
   }
 
   renderAddNewReminderBtn(){
@@ -62,22 +97,44 @@ class Home extends Component {
       />
     );
   }
+  renderInfoBtn(){
+    return (
+      <TouchableOpacity onPress={()=> console.log('do something')}>
+        <Image source={require('./img/info.svg')} style={{width: 25, height: 25}}/>
+      </TouchableOpacity>
+    );
+  }
 
-  renderList(){}
+  renderCorrectView(){
+    if(this.state.realData!=null){
+    return (
+        <View style={styles.bodyContainer}>
+          <Reminderlist data={this.state.realData}/>
+        </View>
+      );
+    }
+    else {
+      return (
+        <Text>You have no saved tasks. Add new ones and they will appeat here.</Text>
+      );
+    }
+    
+  }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <View style={styles.leftTopContainer}>
-            <Text>When Did I Do It?</Text>
+            <Text style={styles.titleStyle}>When Did I Do It?</Text>
           </View>
           <View style={styles.rightTopContainer}>
             {this.renderAddNewReminderBtn()}
           </View>
         </View>
-        <View style={styles.bodyContainer}>
-          <Reminderlist data={this.state.data}/>
+        {this.renderCorrectView()}
+        <View style={styles.infoBtnStyle}>
+          {this.renderInfoBtn()}
         </View>
       </View>
     )
@@ -91,11 +148,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 17,
     flexDirection: 'column', 
-   
   //  textAlign: 'center',
     backgroundColor: '#ffffff', 
     alignContent: 'center',
-    backgroundColor: '#f3f3f4'
+    backgroundColor: '#DEF2C8', 
+    backgroundColor: '#fefad4'
   }, 
   topContainer: {
     flexDirection: 'row', 
@@ -110,6 +167,16 @@ const styles = StyleSheet.create({
   rightTopContainer: {
     justifyContent: 'flex-end', 
   }, 
+  titleStyle: {
+    fontSize: 20, 
+    color: '#F1828D', 
+    fontWeight: 'bold',
+  }, 
   bodyContainer: {
+  }, 
+  infoBtnStyle: {
+    position: 'absolute', 
+    bottom:30, 
+    right: 30
   }
 })

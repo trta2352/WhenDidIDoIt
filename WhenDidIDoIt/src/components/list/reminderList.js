@@ -27,41 +27,26 @@ class ReminderList extends Component {
     }
   }
 
-  renderRateOrFollowBtn = (status) =>{
-   
-      return (
-        <View style={{
-          backgroundColor: '#f3f3f4', 
-          height: 40, 
-          width: 40, 
-          borderRadius: 30, 
-          justifyContent: 'center', 
-          alignContent: 'center', 
-          alignItems: 'center'
-        }}><Text>3.7</Text></View>
-
-      );
-  
-  }
-
   renderHeaderStyle(item){
     if(this.state.activeSections.length!= 0){
       if(this.state.activeSections[0]+1==item.id){
         console.log(this.state.activeSections)
         return {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#765d69',
           padding: 10,
           flexDirection: 'row', 
           borderWidth: 0,
           marginBottom: 0,
           alignItems: 'center',
           paddingTop: 20, 
-          paddingBottom: 0,
+          paddingBottom: 5,
+          borderTopLeftRadius: 5, 
+          borderTopRightRadius: 5
         }
       }
       else {
         return {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#765d69',
           padding: 10,
           flexDirection: 'row', 
           borderWidth: 0,
@@ -69,12 +54,13 @@ class ReminderList extends Component {
           alignItems: 'center',
           paddingTop: 20, 
           paddingBottom: 20,
+          borderRadius: 5
         }
       }
     }
     else {
       return {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#765d69',
         padding: 10,
         flexDirection: 'row', 
         borderWidth: 0,
@@ -82,6 +68,7 @@ class ReminderList extends Component {
         alignItems: 'center',
         paddingTop: 20, 
         paddingBottom: 20,
+        borderRadius: 5
       }
     }
   }
@@ -98,7 +85,6 @@ class ReminderList extends Component {
             </Text>
           </View>
           <View style={styles.rateBtnContainer}>
-           
             <Image source={require('./img/up.svg')} />
           </View>
       </View>
@@ -125,7 +111,10 @@ class ReminderList extends Component {
           {this.renderNormalLine('Description', item.description)}
         </View>
         <View style={stylesInfo.sectionContainer}>
-          {this.renderNormalLine('When should I do it again', item.whenShouldIDoItAgain)}
+          {this.renderNormalLine('When did I do it?', item.whenDidIDoIt)}
+        </View>
+        <View style={stylesInfo.sectionContainer}>
+          {this.renderNormalLine('When should I do it again?', item.whenShouldIDoItAgain)}
         </View>
       </View>
     );
@@ -175,9 +164,10 @@ const styles = StyleSheet.create({
     //backgroundColor: 'blue'
   }, 
  title: {
-    color: '#b4bdc7',
+    color: 'white',
    // fontFamily: 'OpenSans-Semibold',
-    fontSize: 12,
+    paddingTop: 3, 
+    fontSize: 13,
   }, 
   statusIconContainer: {
    //marginRight: 20, 
@@ -185,18 +175,18 @@ const styles = StyleSheet.create({
   },
   middleContainer:{
     flexDirection: 'column',
-    flex: 0.5
+    flex: 0.9
   }, 
   rateBtnContainer: {
-    flex: 0.3, 
-    flexDirection: 'row', 
     alignItems: 'center',
-    justifyContent: 'space-between', 
+    justifyContent: 'flex-end', 
+    flex: 0.1
   }, 
   subtitle: {
     color: '#0a1d30',
    // fontFamily: 'OpenSans-Semibold',
-    fontSize: 18,
+    fontSize: 17,
+    fontWeight: 'bold',
   }, 
   header: {
     backgroundColor: '#ffffff',
@@ -214,8 +204,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   content: {
-    padding: 20,
-    backgroundColor: '#fff',
+    padding: 10,
+    backgroundColor: '#ac9da5',
     marginBottom: 10
   },
 })
@@ -249,9 +239,9 @@ const stylesInfo = StyleSheet.create({
     alignItems: 'flex-start', 
   }, 
   leftText: {
-    color: '#a4acb5',
+    color: 'black',
     //fontFamily: 'OpenSans-Semibold',
-    fontSize: 12,
+    fontSize: 14,
   }, 
   rightTextContainer:{
     justifyContent: 'flex-start',

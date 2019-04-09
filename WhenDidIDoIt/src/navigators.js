@@ -11,11 +11,16 @@ import Image from 'react-native-remote-svg'
 import {createStackNavigator, createAppContainer, HeaderBackButton, createMaterialTopTabNavigator, createSwitchNavigator} from 'react-navigation';
 import homeScreen from './screens/home.js'
 
+import AddReminderScreen from './screens/addNewReminder.js'
+
 const homeStack = createStackNavigator(
     {
         home: { 
             screen: homeScreen,
         },
+        AddReminder: {
+            screen: AddReminderScreen
+        }
        
     },
     {
