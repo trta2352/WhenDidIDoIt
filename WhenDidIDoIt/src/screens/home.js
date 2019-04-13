@@ -49,16 +49,16 @@ class Home extends Component {
   }
 
   updatedData(){
-   // this.setState({realData: []})
     (async () => {
       let temp = await DBManager.getAll()
       if(temp != false){
         this.setState({realData: temp})
+        console.log(temp);
       }
       else{
-        this.setState({
+        /*this.setState({
           realData: this.state.data
-        })
+        })*/
       }
     })();
   }
@@ -69,6 +69,7 @@ class Home extends Component {
     this.willFocusSubscription = this.props.navigation.addListener(
       'willFocus',
       () => {
+        this.setState({realData: []})
         this.updatedData();
       }
     );
@@ -106,11 +107,11 @@ class Home extends Component {
   }
 
   renderCorrectView(){
-    if(this.state.realData!=null){
-    return (
-        <View style={styles.bodyContainer}>
-          <Reminderlist data={this.state.realData}/>
-        </View>
+    if(this.state.realData.length!=0){
+      return (
+          <View style={styles.bodyContainer}>
+            <Reminderlist data={this.state.realData} deleteFunc={(id)=> this.deleteFunc(id) } editFunc={(id)=> this.editFunc(id) }/>
+          </View>
       );
     }
     else {
@@ -118,7 +119,22 @@ class Home extends Component {
         <Text>You have no saved tasks. Add new ones and they will appeat here.</Text>
       );
     }
-    
+  }
+
+  editFunc(id){
+
+  }
+
+  deleteFunc(id){
+    (async () => {
+      let temp = await DBManager.remove(id)
+     if(temp){
+      this.updatedData()
+     }
+     else {
+         console.log("Shranjevanje ni uspelo");
+     }
+    })();
   }
 
   render() {

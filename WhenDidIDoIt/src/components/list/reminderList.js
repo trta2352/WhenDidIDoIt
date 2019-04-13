@@ -84,8 +84,16 @@ class ReminderList extends Component {
               {item.whenDidIDoIt}
             </Text>
           </View>
-          <View style={styles.rateBtnContainer}>
-            <Image source={require('./img/up.svg')} />
+          <View style={{backgroundColor: '#ac9da5', paddingRight: 4, borderRadius: 5, marginLeft: 40, flex: 0.5}}>
+            <View style={styles.rateBtnContainer}>
+              <TouchableOpacity style={{paddingRight: 10}} onPress={() =>  this.props.deleteFunc(item.id)}>
+                <Image source={require('./img/trash.svg')} style={{height: 35, width: 35}}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={{paddingRight: 8}} onPress={() =>  this.props.editFunc(item.id)}>
+                <Image source={require('./img/edit2.svg')} style={{height: 35, width: 35}}/>
+              </TouchableOpacity>
+              <Image source={require('./img/up.svg')} style={{height: 45, width: 45}}/>
+            </View>
           </View>
       </View>
     );
@@ -127,10 +135,10 @@ class ReminderList extends Component {
   };
   
   render() {
-    const {data} = this.props;
+    const {data, deleteFunc, editFunc} = this.props;
     return (
       <View>
-        <ScrollView>   
+        <ScrollView showsVerticalScrollIndicator={false}>   
           <Accordion
             sections={data}
             activeSections={this.state.activeSections}
@@ -147,7 +155,9 @@ class ReminderList extends Component {
 }
 
 ReminderList.propTypes ={
-    data: PropTypes.any.isRequired
+    data: PropTypes.any.isRequired, 
+    deleteFunc: PropTypes.func, 
+    editFunc: PropTypes.func
 }
 
 export default ReminderList
@@ -175,12 +185,13 @@ const styles = StyleSheet.create({
   },
   middleContainer:{
     flexDirection: 'column',
-    flex: 0.9
+    flex: 0.5
   }, 
   rateBtnContainer: {
     alignItems: 'center',
     justifyContent: 'flex-end', 
-    flex: 0.1
+    flexDirection: 'row', 
+    flex: 1
   }, 
   subtitle: {
     color: '#0a1d30',

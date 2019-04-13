@@ -12,10 +12,12 @@ const Storage = {
                     let key = store[i][0];
                     let value = store[i][1];
 
-                    itemArray.push(JSON.parse( value));
+                    itemArray.push(JSON.parse(value));
                   });
                 
               });
+
+              itemArray = itemArray.sort(function(a, b){return a.id - b.id});
               return itemArray
         }
         catch(error){
@@ -26,13 +28,14 @@ const Storage = {
         try{
             var itemArray = []
             const items = await AsyncStorage.getAllKeys();
+            var ints= items.map(parseFloat);
+            
+            var maxID = Math.max(...ints);
             if(items.length==0){
                 return 1
             }
             else {
-                let lastItem = items[items.length-1];
-
-                return parseInt(lastItem)+1
+                return maxID+1;
             }
         }
         catch(error){
@@ -51,14 +54,13 @@ const Storage = {
             return false
           }
     }, 
-    remove: async function(){
+    remove: async function(id){
         try{
-            const result = await AsyncStorage.setItem('@Reminders:AllReminders', '');
+            const result = await AsyncStorage.removeItem(id.toString());
             return true
         }
         catch(error){
             return false
-
         }
 
     }, 
