@@ -16,6 +16,8 @@ import Reminderlist from '../components/list/reminderList.js';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import DBManager from '../utils/dbManager.js'
 
+import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
+
 class AddNewReminder extends Component {
   
   constructor(props) {
@@ -28,7 +30,9 @@ class AddNewReminder extends Component {
         description: '', 
         pastTime: '', 
         futureTime: '', 
-        currentVisible: 0
+        currentVisible: 0, 
+        areYousureAlertVisible: false, 
+        choiceId: 0
     }
   }
   
@@ -78,15 +82,14 @@ class AddNewReminder extends Component {
   saveBtnPressed(){
     (async () => {
         const reminder = {
-            id:this.state.id,
-            'title': this.state.title, 
-            'description': this.state.description,
-            'whenDidIDoIt': this.state.pastTime,
-            'whenShouldIDoItAgain': this.state.futureTime,
+          id:this.state.id,
+          'title': this.state.title, 
+          'description': this.state.description,
+          'whenDidIDoIt': this.state.pastTime,
+          'whenShouldIDoItAgain': this.state.futureTime,
         }
 
         let temp = await DBManager.save(reminder)
-        console.log(temp);
        if(temp){
         this.props.navigation.goBack();
        }

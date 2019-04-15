@@ -14,9 +14,9 @@ import AddBtn from '../components/buttons/addBtn.js'
 import Reminderlist from '../components/list/reminderList.js'
 
 import DBManager from '../utils/dbManager.js'
+import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 
 class Home extends Component {
-  
   constructor(props) {
     super(props);
 
@@ -44,7 +44,9 @@ class Home extends Component {
           whenShouldIDoItAgain: '14.4.2019 14:00'
         }
       ], 
-      realData: []
+      realData: [], 
+      areYousureAlertVisible: false, 
+      choiceId: 0
     }
   }
 
@@ -53,14 +55,27 @@ class Home extends Component {
       let temp = await DBManager.getAll()
       if(temp != false){
         this.setState({realData: temp})
-        console.log(temp);
       }
       else{
-        /*this.setState({
-          realData: this.state.data
-        })*/
+        this.setState({
+          realData: []
+        })
       }
     })();
+  }
+
+  renderAreYouSureAlert = () =>{
+    return (
+      <AreYouSureAlert 
+        isVisible={this.state.areYousureAlertVisible}
+        callback ={()=> this.setState({areYousureAlertVisible: !this.state.areYousureAlertVisible})}
+        choiceBtn = {(choice)=> { this.deleteItem(choice)}}
+        titleText={'Delete'}
+        //subtitleText ={"Ali ste prepričani, da se želite odjaviti?"}
+       // leftBtnTitle = {'Prekliči'}
+        //rightBtnTitle = {'Odjava'}
+        />
+    );
   }
 
   componentDidMount = () =>{
@@ -110,7 +125,7 @@ class Home extends Component {
     if(this.state.realData.length!=0){
       return (
           <View style={styles.bodyContainer}>
-            <Reminderlist data={this.state.realData} deleteFunc={(id)=> this.deleteFunc(id) } editFunc={(id)=> this.editFunc(id) }/>
+            <Reminderlist data={this.state.realData} deleteFunc={(id)=> this.deleteFunc(id)} editFunc={(id)=> this.editFunc(id)}/>
           </View>
       );
     }
@@ -126,15 +141,32 @@ class Home extends Component {
   }
 
   deleteFunc(id){
-    (async () => {
-      let temp = await DBManager.remove(id)
-     if(temp){
-      this.updatedData()
-     }
-     else {
-         console.log("Shranjevanje ni uspelo");
-     }
-    })();
+    this.setState({choiceId: id, areYousureAlertVisible: true})
+  }
+
+  removeFromCurrentList(){
+    for(var i= 0; i< this.state.realData.length; i++){
+      if (this.state.realData[i].id == this.state.choiceId){
+        var tempArray = this.state.realData.splice(i, 1);
+        this.setState({realData: tempArray});
+      }
+    }
+  }
+
+  deleteItem(choice){
+    this.setState({areYousureAlertVisible: false});
+    if(choice==true){
+      (async () => {
+        let temp = await DBManager.remove(this.state.choiceId)
+        if(temp){
+          this.updatedData()
+          this.removeFromCurrentList();
+       }
+      })();
+    }
+    else {
+      
+    }
   }
 
   render() {
@@ -151,6 +183,7 @@ class Home extends Component {
         {this.renderCorrectView()}
         <View style={styles.infoBtnStyle}>
           {this.renderInfoBtn()}
+          {this.renderAreYouSureAlert()}
         </View>
       </View>
     )
