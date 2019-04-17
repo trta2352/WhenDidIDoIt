@@ -17,7 +17,7 @@ class ButtonType1 extends React.Component {
             style={{
                 paddingTop: 13,
                 paddingBottom: 13,
-                backgroundColor: '#0a1d30',
+                backgroundColor: '#1D3557',
                 borderRadius:23, 
                 width: width, 
                 height: height
@@ -26,7 +26,7 @@ class ButtonType1 extends React.Component {
              <Text 
                 style={{
                     fontSize: textSize,
-                    color: '#ffffff',
+                    color: '#A8DADC',
                     textAlign: 'center',
                   //  fontFamily: 'OpenSans-Bold',
                     }}>

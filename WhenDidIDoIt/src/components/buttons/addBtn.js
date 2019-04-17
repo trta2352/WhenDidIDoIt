@@ -11,7 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 class AddBtn extends React.Component {
 	render() {
-		const { text, onPress, width, height, textSize, backgroundColor ='#8fb9a8'} = this.props;
+		const { text, onPress, width, height, textSize, backgroundColor ='#8fb9a8', textColor='#ffffff'} = this.props;
 		return (
       <TouchableOpacity 
         style={{
@@ -26,7 +26,7 @@ class AddBtn extends React.Component {
          <Text 
           style={{
             fontSize: textSize,
-            color: '#ffffff',
+            color: textColor, 
             textAlign: 'center',
             fontWeight: 'bold',
             // fontFamily: 'OpenSans-Bold',
@@ -43,6 +43,7 @@ AddBtn.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired, 
   textSize: PropTypes.number.isRequired, 
-  backgroundColor: PropTypes.string
+  backgroundColor: PropTypes.string, 
+  textColor: PropTypes.string
 };
 export default AddBtn;

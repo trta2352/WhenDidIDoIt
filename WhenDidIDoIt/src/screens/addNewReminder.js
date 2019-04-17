@@ -36,12 +36,50 @@ class AddNewReminder extends Component {
     }
   }
   
+  renderAreYouSureAlert = () =>{
+    return (
+      <AreYouSureAlert 
+        isVisible={this.state.areYousureAlertVisible}
+        callback ={()=> this.setState({areYousureAlertVisible: !this.state.areYousureAlertVisible})}
+        choiceBtn = {(choice)=> { this.handleBackButton(choice)}}
+        titleText={'GO BACK'}
+        subtitleText ={"Are you sure you want to go back? Unsaved changes will be lost."}
+        leftBtnTitle = {'Cancel'}
+        rightBtnTitle = {'Go back'}
+        />
+    );
+  }
+
+  handleBackButton(choice){
+    this.setState({
+      areYousureAlertVisible: false
+    })
+
+    if(choice){
+      this.props.navigation.goBack();
+    }
+    else {
+      //do nothing
+    }
+  }
+  
   cancelBtnPressed(){
-    this.props.navigation.goBack();
+    this.setState({areYousureAlertVisible: true})
   }
 
   componentWillMount(){
-    (async () => {
+    if(this.props.navigation.state.params !=null){
+      let item = this.props.navigation.state.params;
+      this.setState({
+        id: item.id, 
+        title: item.title,
+        description: item.description, 
+        pastTime: item.whenDidIDoIt, 
+        futureTime: item.whenShouldIDoItAgain
+      })
+    }
+    else {
+      (async () => {
         let temp = await DBManager.getLastKey();
         if(temp==null){
             this.setState({id: 1})
@@ -50,6 +88,8 @@ class AddNewReminder extends Component {
             this.setState({id: temp})
         }
       })();
+    }
+    
   }
 
   _showDateTimePicker = (pickerId) => this.setState({ isDateTimePickerVisible: true, currentVisible: pickerId });
@@ -74,22 +114,23 @@ class AddNewReminder extends Component {
         width={130}
         height={40}
         textSize={14}
-        backgroundColor={'#c73749'}
+        backgroundColor={'#E63946'}
+        textColor={'#1D3557'}
       />
     );
   }
 
   saveBtnPressed(){
     (async () => {
-        const reminder = {
-          id:this.state.id,
-          'title': this.state.title, 
-          'description': this.state.description,
-          'whenDidIDoIt': this.state.pastTime,
-          'whenShouldIDoItAgain': this.state.futureTime,
-        }
+      const reminder = {
+        id:this.state.id,
+        'title': this.state.title, 
+        'description': this.state.description,
+        'whenDidIDoIt': this.state.pastTime,
+        'whenShouldIDoItAgain': this.state.futureTime,
+      }
 
-        let temp = await DBManager.save(reminder)
+      let temp = await DBManager.save(reminder)
        if(temp){
         this.props.navigation.goBack();
        }
@@ -107,6 +148,8 @@ class AddNewReminder extends Component {
         width={130}
         height={40}
         textSize={14}
+        backgroundColor={'#1D3557'}
+        textColor={'#A8DADC'}
       />
     );
   }
@@ -168,43 +211,43 @@ class AddNewReminder extends Component {
 
   renderInputFields(){
     return(
-        <View>
-            <Text style={styles.inputFieldTitle}>Task title</Text>
-            <Input 
-                placeholder={'Cleaned room'}
-                containerStyle={styles.inputContainer}
-                inputContainerStyle={{
-                    borderBottomWidth: 0
-                }}
-                inputStyle={styles.inputText}
-                value={this.state.title}
-                onChangeText={(text)=> this.setState({title: text})} 
-            />
-            <Text style={styles.inputFieldTitle}>Description</Text>
-            <Input 
-                placeholder={'Big room clean up'}
-                containerStyle={styles.inputContainer}
-                inputContainerStyle={{
-                    borderBottomWidth: 0
-                }}
-                inputStyle={styles.inputText}
-                value={this.state.description}
-                onChangeText={(text)=> this.setState({description: text})} 
-            />
-            <Text style={styles.inputFieldTitle}>When did I do it?</Text>
-            {this.renderPastInput()}
-            <Text style={styles.inputFieldTitle}>When should I do it again?</Text>
-            {this.renderFutureInput()}
-        </View>
-    );
+      <View style={{paddingTop:-100}}>
+        <Text style={styles.inputFieldTitle}>Task title</Text>
+        <Input 
+          placeholder={'Cleaned room'}
+          containerStyle={styles.inputContainer}
+          inputContainerStyle={{
+            borderBottomWidth: 0
+          }}
+          inputStyle={styles.inputText}
+          value={this.state.title}
+          onChangeText={(text)=> this.setState({title: text})} 
+        />
+        <Text style={styles.inputFieldTitle}>Description</Text>
+        <Input 
+          placeholder={'Big room clean up'}
+          containerStyle={styles.inputContainer}
+          inputContainerStyle={{
+            borderBottomWidth: 0
+          }}
+          inputStyle={styles.inputText}
+          value={this.state.description}
+          onChangeText={(text)=> this.setState({description: text})} 
+        />
+        <Text style={styles.inputFieldTitle}>When did I do it?</Text>
+        {this.renderPastInput()}
+        <Text style={styles.inputFieldTitle}>When should I do it again?</Text>
+        {this.renderFutureInput()}
+      </View>
+    )
   }
 
   renderSaveBtnView(){
-      return(
-          <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40}}>
-            {this.renderSaveBtn()}
-          </View>
-      );
+    return(
+      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40}}>
+        {this.renderSaveBtn()}
+      </View>
+    );
   }
 
   render() {
@@ -222,6 +265,7 @@ class AddNewReminder extends Component {
          {this.renderInputFields()}
          {this.renderSaveBtnView()}
          {this.renderDateTimePicker()}
+         {this.renderAreYouSureAlert()}
         </View>
       </View>
     )
@@ -236,16 +280,14 @@ const styles = StyleSheet.create({
     padding: 17,
     flexDirection: 'column', 
   //  textAlign: 'center',
-    backgroundColor: '#ffffff', 
     alignContent: 'center',
-    backgroundColor: '#DEF2C8', 
-    backgroundColor: '#fefad4'
+    backgroundColor: '#F7FCF5', 
   }, 
   topContainer: {
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     alignItems: 'center', 
-    marginBottom: 40,
+    marginBottom: 20,
     ...Platform.select({
       ios: {
         marginTop: 50, 
@@ -265,7 +307,7 @@ const styles = StyleSheet.create({
   }, 
   titleStyle: {
     fontSize: 20, 
-    color: '#F1828D', 
+    color: '#2D3142', 
     fontWeight: 'bold',
   }, 
   bodyContainer: {
@@ -288,8 +330,9 @@ const styles = StyleSheet.create({
     fontSize: 12, 
   }, 
   inputFieldTitle: {
-      fontSize: 15, 
-      paddingTop: 10
-      
+      fontSize: 17, 
+      paddingTop: 10, 
+      color: '#2D3142', 
+      fontWeight: 'bold',
   }
 })

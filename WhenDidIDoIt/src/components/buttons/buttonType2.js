@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 class ButtonType2 extends React.Component {
 	render() {
-    const { text, onPress, width, height, textSize, borderColor='#f99d32', textColor = '#f99d32', fontFamily = 'OpenSans-SemiBold', backgroundColor = 'transparent'} = this.props;
+    const { text, onPress, width, height, textSize, borderColor='#f99d32', textColor = '#1D3557', fontFamily = 'OpenSans-SemiBold', backgroundColor = '#E63946'} = this.props;
 		return (
           <TouchableOpacity 
             style={{
@@ -20,8 +20,7 @@ class ButtonType2 extends React.Component {
                 paddingBottom: 13,*/
                 backgroundColor: backgroundColor,
                 borderRadius:23, 
-                borderColor: borderColor,
-                borderWidth: 2,
+                borderWidth: 0.5,
                 width: this.props.width, 
                 height: this.props.height, 
                 alignContent: 'center', 

@@ -6,7 +6,9 @@ import {
   Alert, 
   FlatList, 
   Platform, 
-  TouchableOpacity
+  TouchableOpacity, 
+  ScrollView, 
+  ActivityIndicator
 } from 'react-native'
 import { Icon, ListItem } from 'react-native-elements';
 import Image from 'react-native-remote-svg'
@@ -15,6 +17,7 @@ import Reminderlist from '../components/list/reminderList.js'
 
 import DBManager from '../utils/dbManager.js'
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
+import InfoAlert from '../components/alert/infoAlert.js'
 
 class Home extends Component {
   constructor(props) {
@@ -30,7 +33,7 @@ class Home extends Component {
           whenShouldIDoItAgain: '14.4.2019 14:00'
         }, 
         {
-          id: 2, 
+          id: 6, 
           title: 'Clean my car', 
           description: 'I Cleaned my room last week. It was super fun. I should do it again sooon!', 
           whenDidIDoIt: '14.3.2019 14:00', 
@@ -46,22 +49,42 @@ class Home extends Component {
       ], 
       realData: [], 
       areYousureAlertVisible: false, 
-      choiceId: 0
+      missingInputVisible: false, 
+      choiceId: 0, 
+      isLoadingIndicatorVisible: true
     }
   }
 
-  updatedData(){
+  renderInfoAlert = () =>{
+    return (
+      <InfoAlert 
+        isVisible={this.state.missingInputVisible}
+        callback ={()=> this.setState({missingInputVisible: !this.state.missingInputVisible})}
+        titleText={"Some information about the application"}
+        subtitleText={'This application was developed as a side project. Additional information will be added here. '}
+        />
+    );
+  }
+
+  updatedData(isUpdate){
     (async () => {
       let temp = await DBManager.getAll()
       if(temp != false){
         this.setState({realData: temp})
       }
       else{
+        if(isUpdate){
+          this.setState({
+            realData: []
+          })
+        }
         this.setState({
-          realData: []
+          isLoadingIndicatorVisible: false
         })
       }
     })();
+
+    
   }
 
   renderAreYouSureAlert = () =>{
@@ -70,24 +93,23 @@ class Home extends Component {
         isVisible={this.state.areYousureAlertVisible}
         callback ={()=> this.setState({areYousureAlertVisible: !this.state.areYousureAlertVisible})}
         choiceBtn = {(choice)=> { this.deleteItem(choice)}}
-        titleText={'Delete'}
+        titleText={'REMOVE'}
         //subtitleText ={"Ali ste prepričani, da se želite odjaviti?"}
-       // leftBtnTitle = {'Prekliči'}
-        //rightBtnTitle = {'Odjava'}
+        leftBtnTitle = {'Cancel'}
+        rightBtnTitle = {'Remove'}
         />
     );
   }
 
   componentDidMount = () =>{
    this.updatedData();
-
     this.willFocusSubscription = this.props.navigation.addListener(
       'willFocus',
       () => {
-        this.setState({realData: []})
-        this.updatedData();
+        this.updatedData(true);
       }
     );
+    this.setState({isLoadingIndicatorVisible: true})
   }
 
   componentDidMount() {
@@ -98,24 +120,36 @@ class Home extends Component {
     this.willFocusSubscription.remove();
   }
   
-  addBtnPressed(){
-    this.props.navigation.navigate('AddReminder');
+  openAddNewReminderScreen(id){
+    if(id!=-1){
+      for(var i = 0;i< this.state.realData.length;i++){
+        if (this.state.realData[i].id== id){
+          let item = this.state.realData[i];
+          this.props.navigation.navigate('AddReminder', item);    
+        }
+      }
+    }
+    else{
+      this.props.navigation.navigate('AddReminder');
+    }
   }
 
   renderAddNewReminderBtn(){
     return (
       <AddBtn 
         text="ADD"
-        onPress = {()=> {this.addBtnPressed()}}
+        onPress = {()=> {this.openAddNewReminderScreen(-1)}}
         width={150}
         height={40}
         textSize={14}
+        backgroundColor={'#1D3557'}
+        textColor={'#A8DADC'}
       />
     );
   }
   renderInfoBtn(){
     return (
-      <TouchableOpacity onPress={()=> console.log('do something')}>
+      <TouchableOpacity onPress={()=> this.setState({missingInputVisible: !this.state.missingInputVisible})}>
         <Image source={require('./img/info.svg')} style={{width: 25, height: 25}}/>
       </TouchableOpacity>
     );
@@ -124,20 +158,29 @@ class Home extends Component {
   renderCorrectView(){
     if(this.state.realData.length!=0){
       return (
-          <View style={styles.bodyContainer}>
+          <ScrollView style={styles.bodyContainer}>
             <Reminderlist data={this.state.realData} deleteFunc={(id)=> this.deleteFunc(id)} editFunc={(id)=> this.editFunc(id)}/>
-          </View>
+          </ScrollView>
       );
     }
     else {
-      return (
-        <Text>You have no saved tasks. Add new ones and they will appeat here.</Text>
-      );
+      if(this.state.isLoadingIndicatorVisible==true){
+        return (
+          <ActivityIndicator size="large" color="#0000ff" hidesWhenStopped={this.state.isLoadingIndicatorVisible}/>
+        );
+      }
+      else {
+        return (
+          <View style={{textAlign: 'center', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{textAlign: 'center', fontSize: 17, color: 'black'}}>You have no saved tasks. Add new ones and they will appear here.</Text>
+          </View>
+        );
+      }
     }
   }
 
   editFunc(id){
-
+    this.openAddNewReminderScreen(id)
   }
 
   deleteFunc(id){
@@ -159,7 +202,7 @@ class Home extends Component {
       (async () => {
         let temp = await DBManager.remove(this.state.choiceId)
         if(temp){
-          this.updatedData()
+          this.updatedData(true)
           this.removeFromCurrentList();
        }
       })();
@@ -184,6 +227,7 @@ class Home extends Component {
         <View style={styles.infoBtnStyle}>
           {this.renderInfoBtn()}
           {this.renderAreYouSureAlert()}
+          {this.renderInfoAlert()}
         </View>
       </View>
     )
@@ -198,16 +242,14 @@ const styles = StyleSheet.create({
     padding: 17,
     flexDirection: 'column', 
   //  textAlign: 'center',
-    backgroundColor: '#ffffff', 
     alignContent: 'center',
-    backgroundColor: '#DEF2C8', 
-    backgroundColor: '#fefad4'
+    backgroundColor: '#F7FCF5'
   }, 
   topContainer: {
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     alignItems: 'center', 
-    marginBottom: 40,
+    marginBottom: 30,
     ...Platform.select({
       ios: {
         marginTop: 50, 
@@ -225,8 +267,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', 
   }, 
   titleStyle: {
-    fontSize: 20, 
-    color: '#F1828D', 
+    fontSize: 22, 
+    color: '#E63946', 
     fontWeight: 'bold',
   }, 
   bodyContainer: {

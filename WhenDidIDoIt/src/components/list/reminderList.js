@@ -15,7 +15,6 @@ import PropTypes from 'prop-types';
 import Accordion from 'react-native-collapsible/Accordion';
 import { ScrollView } from 'react-native-gesture-handler';
 
-
 class ReminderList extends Component {
   constructor(props) {
     super(props);
@@ -24,21 +23,22 @@ class ReminderList extends Component {
       isModalVisible: false, 
       isRateModalVisible: false, 
       correctData: [], 
+      currentExtendedItem: null
     }
   }
 
   renderHeaderStyle(item){
     if(this.state.activeSections.length!= 0){
-      if(this.state.activeSections[0]+1==item.id){
-        console.log(this.state.activeSections)
+      if(this.state.currentExtendedItem==item.id){
         return {
-          backgroundColor: '#765d69',
-          padding: 10,
+          backgroundColor: '#457B9D',
+          paddingLeft: 10,
+          paddingRight: 10, 
           flexDirection: 'row', 
           borderWidth: 0,
           marginBottom: 0,
           alignItems: 'center',
-          paddingTop: 20, 
+          paddingTop: 10, 
           paddingBottom: 5,
           borderTopLeftRadius: 5, 
           borderTopRightRadius: 5
@@ -46,28 +46,30 @@ class ReminderList extends Component {
       }
       else {
         return {
-          backgroundColor: '#765d69',
-          padding: 10,
+          backgroundColor: '#457B9D',
+          paddingLeft: 10,
+          paddingRight: 10, 
           flexDirection: 'row', 
           borderWidth: 0,
           marginBottom: 10,
           alignItems: 'center',
-          paddingTop: 20, 
-          paddingBottom: 20,
+          paddingTop: 10, 
+          paddingBottom: 10,
           borderRadius: 5
         }
       }
     }
     else {
       return {
-        backgroundColor: '#765d69',
-        padding: 10,
+        backgroundColor: '#457B9D',
+        paddingLeft: 10,
+        paddingRight: 10, 
         flexDirection: 'row', 
         borderWidth: 0,
         marginBottom: 10,
         alignItems: 'center',
-        paddingTop: 20, 
-        paddingBottom: 20,
+        paddingTop: 10, 
+        paddingBottom: 10,
         borderRadius: 5
       }
     }
@@ -84,7 +86,7 @@ class ReminderList extends Component {
               {item.whenDidIDoIt}
             </Text>
           </View>
-          <View style={{backgroundColor: '#ac9da5', paddingRight: 4, borderRadius: 5, marginLeft: 40, flex: 0.5}}>
+          <View style={{backgroundColor: '#D1D1D1', paddingRight: 4, borderRadius: 5, marginLeft: 40, flex: 0.5}}>
             <View style={styles.rateBtnContainer}>
               <TouchableOpacity style={{paddingRight: 10}} onPress={() =>  this.props.deleteFunc(item.id)}>
                 <Image source={require('./img/trash.svg')} style={{height: 35, width: 35}}/>
@@ -128,9 +130,17 @@ class ReminderList extends Component {
     );
   };
 
-  _updateSections = item => {
+  _updateSections = position => {
+    let item = this.props.data[position];
+    let toSaveValue = null;
+
+    if (item!=null){
+     toSaveValue = item.id
+    }
+
     this.setState({
-      activeSections: item.includes(undefined) ? [] : item,
+      activeSections: position.includes(undefined) ? [] : position,
+      currentExtendedItem: toSaveValue
     });
   };
   
@@ -194,7 +204,7 @@ const styles = StyleSheet.create({
     flex: 1
   }, 
   subtitle: {
-    color: '#0a1d30',
+    color: '#1D3557',
    // fontFamily: 'OpenSans-Semibold',
     fontSize: 17,
     fontWeight: 'bold',
@@ -216,7 +226,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
-    backgroundColor: '#ac9da5',
+    backgroundColor: '#BBCFDB',
     marginBottom: 10
   },
 })
@@ -242,7 +252,7 @@ const stylesInfo = StyleSheet.create({
     flexDirection: 'column', 
     justifyContent: 'space-between',
     flex: 1, 
-    marginTop: 17, 
+    marginTop: 10, 
     marginBottom: 0
   }, 
   leftTextContainer:{
@@ -252,7 +262,7 @@ const stylesInfo = StyleSheet.create({
   leftText: {
     color: 'black',
     //fontFamily: 'OpenSans-Semibold',
-    fontSize: 14,
+    fontSize: 15,
   }, 
   rightTextContainer:{
     justifyContent: 'flex-start',
