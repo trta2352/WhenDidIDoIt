@@ -18,6 +18,8 @@ import Reminderlist from '../components/list/reminderList.js'
 import DBManager from '../utils/dbManager.js'
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import InfoAlert from '../components/alert/infoAlert.js'
+import globalStyle from '../styles/globalStyle.js';
+import colors from '../styles/colors.js';
 
 class Home extends Component {
   constructor(props) {
@@ -32,20 +34,6 @@ class Home extends Component {
           whenDidIDoIt: '14.3.2019 14:00', 
           whenShouldIDoItAgain: '14.4.2019 14:00'
         }, 
-        {
-          id: 6, 
-          title: 'Clean my car', 
-          description: 'I Cleaned my room last week. It was super fun. I should do it again sooon!', 
-          whenDidIDoIt: '14.3.2019 14:00', 
-          whenShouldIDoItAgain: '14.4.2019 14:00'
-        }, 
-        {
-          id: 3, 
-          title: 'Clean my house', 
-          description: 'I Cleaned my room last week. It was super fun. I should do it again sooon!', 
-          whenDidIDoIt: '14.3.2019 14:00', 
-          whenShouldIDoItAgain: '14.4.2019 14:00'
-        }
       ], 
       realData: [], 
       areYousureAlertVisible: false, 
@@ -142,8 +130,8 @@ class Home extends Component {
         width={150}
         height={40}
         textSize={14}
-        backgroundColor={'#1D3557'}
-        textColor={'#A8DADC'}
+        backgroundColor={colors.addBtnBackground}
+        textColor={colors.addBtnText}
       />
     );
   }
@@ -158,7 +146,7 @@ class Home extends Component {
   renderCorrectView(){
     if(this.state.realData.length!=0){
       return (
-          <ScrollView style={styles.bodyContainer}>
+          <ScrollView>
             <Reminderlist data={this.state.realData} deleteFunc={(id)=> this.deleteFunc(id)} editFunc={(id)=> this.editFunc(id)}/>
           </ScrollView>
       );
@@ -214,10 +202,10 @@ class Home extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={globalStyle.container}>
         <View style={styles.topContainer}>
           <View style={styles.leftTopContainer}>
-            <Text style={styles.titleStyle}>When Did I Do It?</Text>
+            <Text style={globalStyle.mainTitleStyle}>When Did I Do It?</Text>
           </View>
           <View style={styles.rightTopContainer}>
             {this.renderAddNewReminderBtn()}
@@ -237,14 +225,6 @@ class Home extends Component {
 export default Home
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 17,
-    flexDirection: 'column', 
-  //  textAlign: 'center',
-    alignContent: 'center',
-    backgroundColor: '#F7FCF5'
-  }, 
   topContainer: {
     flexDirection: 'row', 
     justifyContent: 'space-between', 
@@ -265,13 +245,6 @@ const styles = StyleSheet.create({
   }, 
   rightTopContainer: {
     justifyContent: 'flex-end', 
-  }, 
-  titleStyle: {
-    fontSize: 22, 
-    color: '#E63946', 
-    fontWeight: 'bold',
-  }, 
-  bodyContainer: {
   }, 
   infoBtnStyle: {
     position: 'absolute', 

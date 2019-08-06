@@ -17,6 +17,8 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import DBManager from '../utils/dbManager.js'
 
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
+import globalStyle from '../styles/globalStyle.js';
+import colors from '../styles/colors.js';
 
 class AddNewReminder extends Component {
   
@@ -114,8 +116,8 @@ class AddNewReminder extends Component {
         width={130}
         height={40}
         textSize={14}
-        backgroundColor={'#E63946'}
-        textColor={'#1D3557'}
+        backgroundColor={colors.cancelBtnBackground}
+        textColor={colors.cancelBtnText}
       />
     );
   }
@@ -148,8 +150,8 @@ class AddNewReminder extends Component {
         width={130}
         height={40}
         textSize={14}
-        backgroundColor={'#1D3557'}
-        textColor={'#A8DADC'}
+        backgroundColor={colors.addBtnBackground}
+        textColor={colors.addBtnText}
       />
     );
   }
@@ -170,11 +172,11 @@ class AddNewReminder extends Component {
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
             <Input 
                 placeholder={'Cleaned room'}
-                containerStyle={styles.inputContainerWithDate}
+                containerStyle={globalStyle.inputContainerWithDate}
                 inputContainerStyle={{
                     borderBottomWidth: 0
                 }}
-                inputStyle={styles.inputText}
+                inputStyle={globalStyle.inputText}
                 value={this.state.pastTime}
                 onChangeText={(text)=> {this.setState({pastTime: text}); Keyboard.dismiss()}} 
                 onFocus={()=>{this._showDateTimePicker(1); Keyboard.dismiss()}}
@@ -192,11 +194,11 @@ class AddNewReminder extends Component {
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
             <Input 
                 placeholder={'Cleaned room'}
-                containerStyle={styles.inputContainerWithDate}
+                containerStyle={globalStyle.inputContainerWithDate}
                 inputContainerStyle={{
                     borderBottomWidth: 0
                 }}
-                inputStyle={styles.inputText}
+                inputStyle={globalStyle.inputText}
                 value={this.state.futureTime}
                 onChangeText={(text)=> {this.setState({futureTime: text}); Keyboard.dismiss()}} 
                 onPress={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
@@ -212,21 +214,21 @@ class AddNewReminder extends Component {
   renderInputFields(){
     return(
       <View style={{paddingTop:-100}}>
-        <Text style={styles.inputFieldTitle}>Task title</Text>
+        <Text style={globalStyle.inputFieldTitle}>Task title</Text>
         <Input 
           placeholder={'Cleaned room'}
-          containerStyle={styles.inputContainer}
+          containerStyle={globalStyle.inputContainer}
           inputContainerStyle={{
             borderBottomWidth: 0
           }}
-          inputStyle={styles.inputText}
+          inputStyle={globalStyle.inputText}
           value={this.state.title}
           onChangeText={(text)=> this.setState({title: text})} 
         />
-        <Text style={styles.inputFieldTitle}>Description</Text>
+        <Text style={globalStyle.inputFieldTitle}>Description</Text>
         <Input 
           placeholder={'Big room clean up'}
-          containerStyle={styles.inputContainer}
+          containerStyle={globalStyle.inputContainer}
           inputContainerStyle={{
             borderBottomWidth: 0
           }}
@@ -234,9 +236,9 @@ class AddNewReminder extends Component {
           value={this.state.description}
           onChangeText={(text)=> this.setState({description: text})} 
         />
-        <Text style={styles.inputFieldTitle}>When did I do it?</Text>
+        <Text style={globalStyle.inputFieldTitle}>When did I do it?</Text>
         {this.renderPastInput()}
-        <Text style={styles.inputFieldTitle}>When should I do it again?</Text>
+        <Text style={globalStyle.inputFieldTitle}>When should I do it again?</Text>
         {this.renderFutureInput()}
       </View>
     )
@@ -252,16 +254,16 @@ class AddNewReminder extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={globalStyle.container}>
         <View style={styles.topContainer}>
           <View style={styles.leftTopContainer}>
             {this.renderAddNewReminderBtn()}
           </View>
           <View style={styles.rightTopContainer}>
-            <Text style={styles.titleStyle}>New reminder</Text>
+            <Text style={globalStyle.mainTitleStyle}>New reminder</Text>
           </View>
         </View>
-        <View style={styles.bodyContainer}>
+        <View>
          {this.renderInputFields()}
          {this.renderSaveBtnView()}
          {this.renderDateTimePicker()}
@@ -275,14 +277,6 @@ class AddNewReminder extends Component {
 export default AddNewReminder
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 17,
-    flexDirection: 'column', 
-  //  textAlign: 'center',
-    alignContent: 'center',
-    backgroundColor: '#F7FCF5', 
-  }, 
   topContainer: {
     flexDirection: 'row', 
     justifyContent: 'space-between', 
@@ -305,34 +299,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', 
     paddingRight: 20
   }, 
-  titleStyle: {
-    fontSize: 20, 
-    color: '#2D3142', 
-    fontWeight: 'bold',
-  }, 
-  bodyContainer: {
-
-  }, 
-  inputContainer: {
-    borderColor: '#475c7a', 
-    borderWidth: 1, 
-    borderRadius: 3, 
-    marginTop: 10
-  }, 
-  inputContainerWithDate:{
-    borderColor: '#475c7a', 
-    borderWidth: 1, 
-    borderRadius: 3, 
-    marginTop: 10, 
-    width: '85%'
-  },
-  inputText: {
-    fontSize: 12, 
-  }, 
-  inputFieldTitle: {
-      fontSize: 17, 
-      paddingTop: 10, 
-      color: '#2D3142', 
-      fontWeight: 'bold',
-  }
 })
