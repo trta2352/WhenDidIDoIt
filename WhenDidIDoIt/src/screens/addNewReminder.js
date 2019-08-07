@@ -160,6 +160,7 @@ class AddNewReminder extends Component {
             onConfirm={(date)=>this._handleDatePicked(date, id)}
             onCancel={this._hideDateTimePicker}
             is24Hour={true}
+            mode={'datetime'}
         />
       );
   }
@@ -229,7 +230,7 @@ class AddNewReminder extends Component {
           inputContainerStyle={{
             borderBottomWidth: 0
           }}
-          inputStyle={styles.inputText}
+          inputStyle={globalStyle.inputText}
           value={this.state.description}
           onChangeText={(text)=> this.setState({description: text})} 
         />
