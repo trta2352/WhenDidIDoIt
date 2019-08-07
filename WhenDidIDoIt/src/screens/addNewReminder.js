@@ -3,19 +3,16 @@ import {
   View,
   Text,
   StyleSheet, 
-  Alert, 
-  FlatList, 
   Platform, 
   Keyboard,
   TouchableOpacity
 } from 'react-native'
-import { Icon, ListItem, Input } from 'react-native-elements';
+import {  Input } from 'react-native-elements';
 import Image from 'react-native-remote-svg';
+
 import AddBtn from '../components/buttons/addBtn.js';
-import Reminderlist from '../components/list/reminderList.js';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import DBManager from '../utils/dbManager.js'
-
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';

@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import Image from 'react-native-remote-svg';
 import Modal from 'react-native-modal';
 
-import SaveBtn from '../buttons/buttonType1.js';
-import CancelBtn from '../buttons/buttonType2.js'
+import Button from '../buttons/addBtn';
 
 class AreYouSureAlert extends React.Component {
     constructor(props) {
@@ -32,12 +31,12 @@ class AreYouSureAlert extends React.Component {
                     <Text style={styles.subtitleTextStyle}>{subtitleText}</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 40, paddingRight: 40, paddingBottom: 20}}>
-                    <CancelBtn text={leftBtnTitle}
+                    <Button text={leftBtnTitle}
                         onPress = {()=> choiceBtn(false)}
                         width={110}
                         height={46}
                         textSize={14}/>
-                    <SaveBtn 
+                    <Button 
                         text={rightBtnTitle}
                         onPress = {()=> choiceBtn(true)}
                         width={110}

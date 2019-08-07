@@ -3,18 +3,15 @@ import {
   View,
   Text,
   StyleSheet, 
-  Alert, 
-  FlatList, 
   Platform, 
   TouchableOpacity, 
   ScrollView, 
   ActivityIndicator
 } from 'react-native'
-import { Icon, ListItem } from 'react-native-elements';
 import Image from 'react-native-remote-svg'
+
 import AddBtn from '../components/buttons/addBtn.js'
 import Reminderlist from '../components/list/reminderList.js'
-
 import DBManager from '../utils/dbManager.js'
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import InfoAlert from '../components/alert/infoAlert.js'
