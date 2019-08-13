@@ -28,6 +28,9 @@ target 'WhenDidIDoIt' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+  pod 'react-native-camera', path: '../node_modules/react-native-camera'
+
   target 'WhenDidIDoItTests' do
     inherit! :search_paths
     # Pods for testing

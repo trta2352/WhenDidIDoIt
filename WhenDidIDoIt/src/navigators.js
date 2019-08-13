@@ -12,6 +12,7 @@ import {createStackNavigator, createAppContainer, HeaderBackButton, createMateri
 import homeScreen from './screens/home.js'
 
 import AddReminderScreen from './screens/addNewReminder.js'
+import CameraScreen from './screens/cameraScreen.js'
 
 const homeStack = createStackNavigator(
     {
@@ -20,6 +21,9 @@ const homeStack = createStackNavigator(
         },
         AddReminder: {
             screen: AddReminderScreen
+        }, 
+        cameraScreen:{
+            screen: CameraScreen
         }
        
     },

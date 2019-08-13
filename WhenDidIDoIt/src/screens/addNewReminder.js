@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {
   View,
   Text,
   StyleSheet, 
   Platform, 
   Keyboard,
-  TouchableOpacity
+  TouchableOpacity,
+  AppRegistry, 
+  Dimensions
 } from 'react-native'
 import {  Input } from 'react-native-elements';
 import Image from 'react-native-remote-svg';
@@ -16,22 +18,25 @@ import DBManager from '../utils/dbManager.js'
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
+import { RNCamera } from 'react-native-camera';
+import CameraRoll from "@react-native-community/cameraroll";
 
-class AddNewReminder extends Component {
+class AddNewReminder extends PureComponent {
   
   constructor(props) {
     super(props);
 
     this.state={
-        isDateTimePickerVisible: false, 
-        id: 0, 
-        title: '', 
-        description: '', 
-        pastTime: '', 
-        futureTime: '', 
-        currentVisible: 0, 
-        areYousureAlertVisible: false, 
-        choiceId: 0
+      isDateTimePickerVisible: false, 
+      id: 0, 
+      title: '', 
+      description: '', 
+      pastTime: '', 
+      futureTime: '', 
+      currentVisible: 0, 
+      areYousureAlertVisible: false, 
+      choiceId: 0, 
+      path: null,
     }
   }
   
@@ -66,7 +71,7 @@ class AddNewReminder extends Component {
     this.setState({areYousureAlertVisible: true})
   }
 
-  componentWillMount(){
+  componentDidMount(){
     if(this.props.navigation.state.params !=null){
       let item = this.props.navigation.state.params;
       this.setState({
@@ -119,50 +124,50 @@ class AddNewReminder extends Component {
     );
   }
 
-  saveBtnPressed(){
-    (async () => {
+  saveBtnPressed() {
+    /*(async () => {
       const reminder = {
-        id:this.state.id,
-        'title': this.state.title, 
+        id: this.state.id,
+        'title': this.state.title,
         'description': this.state.description,
         'whenDidIDoIt': this.state.pastTime,
         'whenShouldIDoItAgain': this.state.futureTime,
       }
 
       let temp = await DBManager.save(reminder)
-       if(temp){
+      if (temp) {
         this.props.navigation.goBack();
-       }
-       else {
-           console.log("Shranjevanje ni uspelo");
-       }
-      })();
+      } else {
+        console.log("Shranjevanje ni uspelo");
+      }
+    })();*/
+    this.props.navigation.navigate("cameraScreen")
   }
 
   renderSaveBtn(){
     return (
       <AddBtn 
-        text="SAVE"
+        text = "SAVE"
         onPress = {()=> {this.saveBtnPressed()}}
-        width={130}
-        height={40}
-        textSize={14}
-        backgroundColor={colors.addBtnBackground}
-        textColor={colors.addBtnText}
+        width = {130}
+        height = {40}
+        textSize = {14}
+        backgroundColor = {colors.addBtnBackground}
+        textColor = {colors.addBtnText}
       />
     );
   }
 
   renderDateTimePicker(id){
-      return (
-        <DateTimePicker
-            isVisible={this.state.isDateTimePickerVisible}
-            onConfirm={(date)=>this._handleDatePicked(date, id)}
-            onCancel={this._hideDateTimePicker}
-            is24Hour={true}
-            mode={'datetime'}
-        />
-      );
+    return (
+      <DateTimePicker
+        isVisible={this.state.isDateTimePickerVisible}
+        onConfirm={(date)=>this._handleDatePicked(date, id)}
+        onCancel={this._hideDateTimePicker}
+        is24Hour={true}
+        mode={'datetime'}
+      />
+    );
   }
 
   renderPastInput(){
@@ -242,6 +247,7 @@ class AddNewReminder extends Component {
     )
   }
 
+
   renderSaveBtnView(){
     return(
       <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40}}>
@@ -297,4 +303,19 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', 
     paddingRight: 20
   }, 
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  capture: {
+    marginTop: 40,
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    margin: 20,
+  },
 })
