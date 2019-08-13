@@ -40,8 +40,18 @@ constructor(props){
       return 'off'
     }
   }
+/*
+  openGallery = () =>{
+    console.log("Sem v openGallert()")
+    CameraRoll.getPhotos({
+      first: 10,
+      groupTypes: 'All', 
 
-  openGallery = () =>{}
+    }).then((photo) =>{
+      console.log("Sem v returnu")
+      console.log(photo)
+    })
+  }*/
 
   render() {
     return (
@@ -105,7 +115,7 @@ constructor(props){
               containerStyle = {{backgroundColor: '#e6e6e6'}}
               checkedIcon = {<Image source={require('./img/folder.svg')} />}
               uncheckedIcon = {<Image source={require('./img/folder.svg')} />}
-              onPress = {() => console.log("Do SOMETHING")}
+              onPress = {() => console.log("")/*this.openGallery()*/}
               />
           </View>
         </View>
