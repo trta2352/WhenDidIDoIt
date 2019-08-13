@@ -2,8 +2,47 @@ import React, { PureComponent } from 'react';
 import { AppRegistry, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import CameraRoll from "@react-native-community/cameraroll";
+import { CheckBox } from 'react-native-elements';
+import Image from 'react-native-remote-svg'
 
 class CameraScreen extends PureComponent {
+constructor(props){
+  super(props)
+
+  this.state ={
+    flashOn: false
+  }
+}
+
+  getCheckedCheckBoxView = () =>{
+    return (
+      <View>
+        <Image source={require('./img/flashOn.svg')}/>
+      </View>
+      
+    );
+  }
+
+  getUncheckedCheckBoxView = () =>{
+    return (
+      <View>
+        <Image source={require('./img/flashOff.svg')}/>
+      </View>
+      
+    );
+  }
+
+  getCorrectFlashMode = () =>{
+    if(this.state.flashOn){
+      return 'on'
+    }
+    else {
+      return 'off'
+    }
+  }
+
+  openGallery = () =>{}
+
   render() {
     return (
       <View style={styles.container}>
@@ -13,7 +52,7 @@ class CameraScreen extends PureComponent {
           }}
           style={styles.preview}
           type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
+          flashMode={this.getCorrectFlashMode()}
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
             message: 'We need your permission to use your camera',
@@ -30,10 +69,45 @@ class CameraScreen extends PureComponent {
             console.log(barcodes);
           }}
         />
-        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
-            <Text style={{ fontSize: 14 }}> SNAP </Text>
-          </TouchableOpacity>
+        <TouchableOpacity 
+          onPress = {()=>{this.props.navigation.navigate('AddReminder')}} 
+          style = {{
+            backgroundColor: '#e6e6e6',
+            position: 'absolute', 
+            borderRadius: 30, 
+            height: 30, 
+            width: 30, 
+            padding: 5, 
+            marginTop: 30, 
+            marginLeft: 20}}>
+          <Image source = {require('./img/x.svg')} style = {{flex: 1, height: '100%', width: '100%'}}/>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
+          <View>
+            <CheckBox 
+              title={<Text></Text>}
+              checked={this.state.flashOn}
+              containerStyle = {{backgroundColor: '#e6e6e6'}}
+              checkedIcon={this.getCheckedCheckBoxView()}
+              uncheckedIcon={this.getUncheckedCheckBoxView()}
+              onPress ={() => this.setState({ flashOn: !this.state.flashOn })}
+              />
+          </View>
+          <View>
+            <TouchableOpacity onPress={this.takePicture.bind(this)} style={{backgroundColor: '#e6e6e6', borderRadius: 20, height: 100, width: 100, padding: 5}}>
+              <Image source={require('./img/camera.svg')} style = {{flex: 1, height: '100%', width: '100%'}}/>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <CheckBox 
+              title = {<Text></Text>}
+              checked = {true}
+              containerStyle = {{backgroundColor: '#e6e6e6'}}
+              checkedIcon = {<Image source={require('./img/folder.svg')} />}
+              uncheckedIcon = {<Image source={require('./img/folder.svg')} />}
+              onPress = {() => console.log("Do SOMETHING")}
+              />
+          </View>
         </View>
       </View>
     );
@@ -43,7 +117,9 @@ class CameraScreen extends PureComponent {
     if (this.camera) {
       const options = { quality: 1, base64: true };
       const data = await this.camera.takePictureAsync(options);
-      CameraRoll.saveToCameraRoll(data.uri, 'photo');
+      CameraRoll.saveToCameraRoll(data.uri, 'photo').then(() => {
+        this.props.navigation.navigate('AddReminder')
+      })
     }
   };
 }
@@ -53,7 +129,6 @@ export  default CameraScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
     backgroundColor: 'black',
   },
   preview: {
