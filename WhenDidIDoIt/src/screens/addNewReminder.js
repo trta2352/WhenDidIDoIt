@@ -6,8 +6,8 @@ import {
   Platform, 
   Keyboard,
   TouchableOpacity,
-  AppRegistry, 
-  Dimensions
+  ScrollView, 
+  ActivityIndicator
 } from 'react-native'
 import {  Input } from 'react-native-elements';
 import Image from 'react-native-remote-svg';
@@ -18,8 +18,7 @@ import DBManager from '../utils/dbManager.js'
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
-import { RNCamera } from 'react-native-camera';
-import CameraRoll from "@react-native-community/cameraroll";
+import ImagePicker from 'react-native-image-picker';
 
 class AddNewReminder extends PureComponent {
   
@@ -37,6 +36,7 @@ class AddNewReminder extends PureComponent {
       areYousureAlertVisible: false, 
       choiceId: 0, 
       path: null,
+      shouldStartTheIndicator: false
     }
   }
   
@@ -125,7 +125,7 @@ class AddNewReminder extends PureComponent {
   }
 
   saveBtnPressed() {
-    /*(async () => {
+    (async () => {
       const reminder = {
         id: this.state.id,
         'title': this.state.title,
@@ -140,11 +140,71 @@ class AddNewReminder extends PureComponent {
       } else {
         console.log("Shranjevanje ni uspelo");
       }
-    })();*/
-    this.props.navigation.navigate("cameraScreen")
+    })();
+    
   }
 
-  renderSaveBtn(){
+  renderAddPhotoBtn = () => {
+    return (
+      <AddBtn 
+        text = "ADD PHOTO"
+        onPress = {()=> {this.setState({shouldStartTheIndicator: true}); this.showImagePicker()}}
+        width = {170}
+        height = {40}
+        textSize = {14}
+        backgroundColor = {colors.addBtnBackground}
+        textColor = {colors.addBtnText}
+      />
+      );
+  } 
+
+  showImagePicker = () => {
+    const options = {
+      title: 'Select task/reminder images.',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+        cameraRoll: true
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      this.setState({
+        path: response.uri
+        })
+      
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        console.log('Response = ', response);
+        this.setState({
+          path: response.uri
+        })
+      }
+    });
+  }
+
+  renderSelectedImage = () =>{
+    if(this.state.path != null){
+      this.setState({shouldStartTheIndicator: false})
+      return(
+        <TouchableOpacity style = {{ backgroundColor: 'black', borderRadius: 4, marginTop: 5, marginBottom: 5}} onPress = {() => {this.showImagePicker(); this.setState({shouldStartTheIndicator: true, path: null})}}>
+           <Image source={{ uri: this.state.path }} style={{width: 170, height: 227}}/>
+        </TouchableOpacity>
+      );
+    }
+    else if(this.state.shouldStartTheIndicator){
+      return(
+        <ActivityIndicator size="large" color="#0000ff" />
+      );
+    }
+  }
+
+  renderSaveBtn = () => {
     return (
       <AddBtn 
         text = "SAVE"
@@ -247,6 +307,15 @@ class AddNewReminder extends PureComponent {
     )
   }
 
+  renderImageViewAndBtn = () =>{
+    return(
+      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40}}>
+        {this.renderSelectedImage()}
+        {this.renderAddPhotoBtn()}
+      </View>
+    );
+  }
+
 
   renderSaveBtnView(){
     return(
@@ -267,12 +336,13 @@ class AddNewReminder extends PureComponent {
             <Text style={globalStyle.mainTitleStyle}>New reminder</Text>
           </View>
         </View>
-        <View>
+        <ScrollView style={{flex: 0.7}}>
          {this.renderInputFields()}
+         {this.renderImageViewAndBtn()}
          {this.renderSaveBtnView()}
          {this.renderDateTimePicker()}
          {this.renderAreYouSureAlert()}
-        </View>
+        </ScrollView>
       </View>
     )
   }
@@ -294,7 +364,7 @@ const styles = StyleSheet.create({
       android:{
         marginTop: 20, 
       }
-    })
+    }), 
   }, 
   leftTopContainer: {
     justifyContent: 'flex-start', 

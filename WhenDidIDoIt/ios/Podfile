@@ -31,6 +31,8 @@ target 'WhenDidIDoIt' do
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
   pod 'react-native-camera', path: '../node_modules/react-native-camera'
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'WhenDidIDoItTests' do
     inherit! :search_paths
     # Pods for testing
