@@ -5,6 +5,7 @@ import Image from 'react-native-remote-svg';
 import Modal from 'react-native-modal';
 
 import Button from '../buttons/addBtn';
+import images from '../../assets/images';
 
 class AreYouSureAlert extends React.Component {
     constructor(props) {
@@ -21,7 +22,7 @@ class AreYouSureAlert extends React.Component {
             <View style={styles.modalElementsContainer}>
                 <View style={styles.closeButton}>
                     <TouchableOpacity onPress={()=> callback()} style={{alignSelf: 'flex-end'}}>
-                        <Image source={require('./img/close_grey.svg')} />
+                        <Image source={images.closes} />
                     </TouchableOpacity>
                 </View>
                 <View  style={{alignItems: 'center'}}>

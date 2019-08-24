@@ -32,9 +32,9 @@ export default StyleSheet.create({
     fontSize: 12, 
   }, 
   inputFieldTitle: {
-      fontSize: 17, 
-      paddingTop: 10, 
-      color: '#2D3142', 
-      fontWeight: 'bold',
+    fontSize: 17, 
+    paddingTop: 10, 
+    color: '#2D3142', 
+    fontWeight: 'bold',
   }, 
 });

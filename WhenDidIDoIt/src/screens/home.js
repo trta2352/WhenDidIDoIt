@@ -17,6 +17,7 @@ import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import InfoAlert from '../components/alert/infoAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
+import images from '../assets/images.js';
 
 class Home extends Component {
   constructor(props) {
@@ -135,7 +136,7 @@ class Home extends Component {
   renderInfoBtn(){
     return (
       <TouchableOpacity onPress={()=> this.setState({missingInputVisible: !this.state.missingInputVisible})}>
-        <Image source={require('./img/info.svg')} style={{width: 25, height: 25}}/>
+        <Image source={images.info} style={{width: 25, height: 25}}/>
       </TouchableOpacity>
     );
   }

@@ -14,6 +14,7 @@ import Image from 'react-native-remote-svg'
 import PropTypes from 'prop-types';
 import Accordion from 'react-native-collapsible/Accordion';
 import { ScrollView } from 'react-native-gesture-handler';
+import images from '../../assets/images';
 
 class ReminderList extends Component {
   constructor(props) {
@@ -75,28 +76,58 @@ class ReminderList extends Component {
     }
   }
 
+  getRandomImage = (item) => {
+    if(item.id%2 == 0){
+      return <Image source={images.clock} style={{width: 30, height: 40}}/>
+    }
+    else if(item.id%3 == 0){
+      return <Image source={images.house} style={{width: 30, height: 40}}/>
+    }
+    else {
+      return <Image source={images.hourGlass} style={{width: 30, height: 40}}/>
+    }
+  }
+
+  getImage = (item) =>{
+    if(item.imagePath != null){
+      return (
+        <View style = {{ backgroundColor: 'black', borderRadius: 4, marginTop: 5, marginBottom: 5, marginRight: 10, flex: 0.1}}>
+          <Image source={{ uri: item.imagePath }} style={{width: 30, height: 40}}/>
+        </View>
+      );
+    }
+    else {
+      return (
+        <View style = {{borderStartColor: '#D1D1D1', borderRadius: 4, marginTop: 5, marginBottom: 5, marginRight: 10, flex: 0.1}}>
+          {this.getRandomImage(item)}
+        </View>
+      );
+    }
+  }
+
   _renderHeader = item => {
     return (
       <View style={this.renderHeaderStyle(item)}>
-          <View style={styles.middleContainer}>
-            <Text style={styles.subtitle}>
-              {item.title}
-            </Text>
-            <Text style={styles.title}>
-              {item.whenDidIDoIt}
-            </Text>
+        {this.getImage(item)}
+        <View style={styles.middleContainer}>
+          <Text style={styles.subtitle}>
+            {item.title}
+          </Text>
+          <Text style={styles.title}>
+            {item.whenDidIDoIt}
+          </Text>
+        </View>
+        <View style={{backgroundColor: '#D1D1D1', paddingRight: 4, borderRadius: 5, paddingLeft: 10, marginLeft: 40, flex: 0.5}}>
+          <View style={styles.rateBtnContainer}>
+            <TouchableOpacity style={{paddingRight: 10}} onPress={() =>  this.props.deleteFunc(item.id)}>
+              <Image source={images.trash} style={{height: 35, width: 35}}/>
+            </TouchableOpacity>
+            <TouchableOpacity style={{paddingRight: 8}} onPress={() =>  this.props.editFunc(item.id)}>
+              <Image source={images.edit2} style={{height: 35, width: 35}}/>
+            </TouchableOpacity>
+            <Image source={images.up} style={{height: 45, width: 45}}/>
           </View>
-          <View style={{backgroundColor: '#D1D1D1', paddingRight: 4, borderRadius: 5, marginLeft: 40, flex: 0.5}}>
-            <View style={styles.rateBtnContainer}>
-              <TouchableOpacity style={{paddingRight: 10}} onPress={() =>  this.props.deleteFunc(item.id)}>
-                <Image source={require('./img/trash.svg')} style={{height: 35, width: 35}}/>
-              </TouchableOpacity>
-              <TouchableOpacity style={{paddingRight: 8}} onPress={() =>  this.props.editFunc(item.id)}>
-                <Image source={require('./img/edit2.svg')} style={{height: 35, width: 35}}/>
-              </TouchableOpacity>
-              <Image source={require('./img/up.svg')} style={{height: 45, width: 45}}/>
-            </View>
-          </View>
+        </View>
       </View>
     );
   };
@@ -195,7 +226,7 @@ const styles = StyleSheet.create({
   },
   middleContainer:{
     flexDirection: 'column',
-    flex: 0.5
+    flex: 0.4
   }, 
   rateBtnContainer: {
     alignItems: 'center',

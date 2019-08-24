@@ -3,6 +3,7 @@ import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import Image from 'react-native-remote-svg';
 import Modal from 'react-native-modal';
+import images from '../../assets/images';
 
 
 class InfoAlert extends React.Component {
@@ -23,7 +24,7 @@ class InfoAlert extends React.Component {
             <View style={styles.modalElementsContainer}>
                 <View style={styles.closeButton}>
                     <TouchableOpacity onPress={()=> callback()} style={{alignSelf: 'flex-end'}}>
-                        <Image source={require('./img/close_grey.svg')} />
+                        <Image source={images.close} />
                     </TouchableOpacity>
                 </View>
                 <View  style={{alignItems: 'center'}}>

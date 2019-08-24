@@ -4,6 +4,7 @@ import { RNCamera } from 'react-native-camera';
 import CameraRoll from "@react-native-community/cameraroll";
 import { CheckBox } from 'react-native-elements';
 import Image from 'react-native-remote-svg'
+import images from '../assets/images';
 
 class CameraScreen extends PureComponent {
 constructor(props){
@@ -17,7 +18,7 @@ constructor(props){
   getCheckedCheckBoxView = () =>{
     return (
       <View>
-        <Image source={require('./img/flashOn.svg')}/>
+        <Image source={images.flashOn}/>
       </View>
       
     );
@@ -26,7 +27,7 @@ constructor(props){
   getUncheckedCheckBoxView = () =>{
     return (
       <View>
-        <Image source={require('./img/flashOff.svg')}/>
+        <Image source={images.flashOff}/>
       </View>
       
     );
@@ -90,7 +91,7 @@ constructor(props){
             padding: 5, 
             marginTop: 30, 
             marginLeft: 20}}>
-          <Image source = {require('./img/x.svg')} style = {{flex: 1, height: '100%', width: '100%'}}/>
+          <Image source = {images.x} style = {{flex: 1, height: '100%', width: '100%'}}/>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 20 }}>
           <View>
@@ -105,7 +106,7 @@ constructor(props){
           </View>
           <View>
             <TouchableOpacity onPress={this.takePicture.bind(this)} style={{backgroundColor: '#e6e6e6', borderRadius: 20, height: 100, width: 100, padding: 5}}>
-              <Image source={require('./img/camera.svg')} style = {{flex: 1, height: '100%', width: '100%'}}/>
+              <Image source={images.camera} style = {{flex: 1, height: '100%', width: '100%'}}/>
             </TouchableOpacity>
           </View>
           <View>
@@ -113,8 +114,8 @@ constructor(props){
               title = {<Text></Text>}
               checked = {true}
               containerStyle = {{backgroundColor: '#e6e6e6'}}
-              checkedIcon = {<Image source={require('./img/folder.svg')} />}
-              uncheckedIcon = {<Image source={require('./img/folder.svg')} />}
+              checkedIcon = {<Image source={images.folder} />}
+              uncheckedIcon = {<Image source={images.folder} />}
               onPress = {() => console.log("")/*this.openGallery()*/}
               />
           </View>

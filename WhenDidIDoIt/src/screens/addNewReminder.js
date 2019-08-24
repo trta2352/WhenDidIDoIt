@@ -19,6 +19,7 @@ import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
 import ImagePicker from 'react-native-image-picker';
+import images from '../assets/images.js';
 
 class AddNewReminder extends PureComponent {
   
@@ -72,14 +73,15 @@ class AddNewReminder extends PureComponent {
   }
 
   componentDidMount(){
-    if(this.props.navigation.state.params !=null){
+    if(this.props.navigation.state.params != null){
       let item = this.props.navigation.state.params;
       this.setState({
         id: item.id, 
         title: item.title,
         description: item.description, 
         pastTime: item.whenDidIDoIt, 
-        futureTime: item.whenShouldIDoItAgain
+        futureTime: item.whenShouldIDoItAgain,
+        path: item.imagePath
       })
     }
     else {
@@ -132,6 +134,7 @@ class AddNewReminder extends PureComponent {
         'description': this.state.description,
         'whenDidIDoIt': this.state.pastTime,
         'whenShouldIDoItAgain': this.state.futureTime,
+        'imagePath': this.state.path
       }
 
       let temp = await DBManager.save(reminder)
@@ -141,7 +144,6 @@ class AddNewReminder extends PureComponent {
         console.log("Shranjevanje ni uspelo");
       }
     })();
-    
   }
 
   renderAddPhotoBtn = () => {
@@ -149,9 +151,9 @@ class AddNewReminder extends PureComponent {
       <AddBtn 
         text = "ADD PHOTO"
         onPress = {()=> {this.setState({shouldStartTheIndicator: true}); this.showImagePicker()}}
-        width = {170}
+        width = {140}
         height = {40}
-        textSize = {14}
+        textSize = {13}
         backgroundColor = {colors.addBtnBackground}
         textColor = {colors.addBtnText}
       />
@@ -246,7 +248,7 @@ class AddNewReminder extends PureComponent {
                 onSubmitEditing={Keyboard.dismiss}
             />
             <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(1)}>
-                <Image source={require('./img/calendar-alt.svg')} style={{width: 35, height: 35, paddingTop:3}}/>
+                <Image source={images.calendarAlt} style={{width: 35, height: 35, paddingTop:3}}/>
             </TouchableOpacity>
         </View>
     );
@@ -268,7 +270,7 @@ class AddNewReminder extends PureComponent {
                 onSubmitEditing={Keyboard.dismiss}
             />
             <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(2)}>
-                <Image source={require('./img/calendar-alt.svg')} style={{width: 35, height: 35, paddingTop:3}}/>
+                <Image source={images.calendarAlt} style={{width: 35, height: 35, paddingTop:3}}/>
             </TouchableOpacity>
         </View>
     );
