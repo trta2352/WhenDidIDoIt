@@ -29,7 +29,7 @@ class AddBtn extends React.Component {
             color: textColor, 
             textAlign: 'center',
             fontWeight: 'bold',
-            // fontFamily: 'OpenSans-Bold',
+            fontFamily: 'CooperHewitt-Bold',
           }}>
           {text}</Text>
 		  </TouchableOpacity>

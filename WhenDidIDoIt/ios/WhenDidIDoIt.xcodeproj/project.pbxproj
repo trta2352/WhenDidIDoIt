@@ -37,6 +37,20 @@
 		D87E36A7A7E0434DBAC21DD8 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 985FB79040454F72B1370B84 /* Foundation.ttf */; };
 		E33AD75B72AC4489AD90B4DF /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 839378A014B1409F94EBC6A5 /* Entypo.ttf */; };
 		E9D2A7C35FEA8C92AA2097A5 /* libPods-WhenDidIDoIt-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5EBF763FDE81402BA61935E /* libPods-WhenDidIDoIt-tvOS.a */; };
+		786AD7FD53654AAAB006350A /* CooperHewitt-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95BE3D16936A4800A9E687B2 /* CooperHewitt-Bold.ttf */; };
+		3A2FEE388EF4454CA393C70A /* CooperHewitt-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4C66FC6F06D49479D8ABAB9 /* CooperHewitt-BoldItalic.ttf */; };
+		8641EAB2781542F2AEC6A076 /* CooperHewitt-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3CDA0548649248DFB4A92BB7 /* CooperHewitt-Book.ttf */; };
+		90C7DB0F74D1404098758FF8 /* CooperHewitt-BookItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09565274270A4ECDAF90BB4D /* CooperHewitt-BookItalic.ttf */; };
+		C7E3C9B1BAE5476CB253CD60 /* CooperHewitt-Heavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 956C4ACF18714736B4FF5279 /* CooperHewitt-Heavy.ttf */; };
+		FF5FEDD89E1F4AA0A8D7BA5C /* CooperHewitt-HeavyItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91EA1566028241D6BEEA29D7 /* CooperHewitt-HeavyItalic.ttf */; };
+		829AD6DDD869421D85460EDB /* CooperHewitt-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F55F4047A2B840058EBC9EA8 /* CooperHewitt-Light.ttf */; };
+		1F6EA9BF777744A885077392 /* CooperHewitt-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 642794290AEB46F9B882AA46 /* CooperHewitt-LightItalic.ttf */; };
+		4B63B9AA89FB4217A43EE029 /* CooperHewitt-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C14612733BB949D18B2E4F21 /* CooperHewitt-Medium.ttf */; };
+		3B0EF616FBE447708796D7FB /* CooperHewitt-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9FA477FD4DB44282A0DF5C78 /* CooperHewitt-MediumItalic.ttf */; };
+		265E59DFCFFE479FAFB48ADB /* CooperHewitt-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BDF3690F65A14000936D978E /* CooperHewitt-Semibold.ttf */; };
+		4F311B7849EF4E88A92DBC66 /* CooperHewitt-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34B350BC08E84673B34209F5 /* CooperHewitt-SemiboldItalic.ttf */; };
+		CD87929D11554CA2A1EC04A1 /* CooperHewitt-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0D4130BA4CF453697123932 /* CooperHewitt-Thin.ttf */; };
+		201646B93F1649B68E23A9C7 /* CooperHewitt-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7EFE00721214F3998AA6196 /* CooperHewitt-ThinItalic.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +116,20 @@
 		F5A0B9CB5ADBBB11CAE79AA2 /* libPods-WhenDidIDoIt-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WhenDidIDoIt-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F92EF9CE99EE49919E8DC4D8 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		FA7B2D2571254CA0AE2693EB /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		95BE3D16936A4800A9E687B2 /* CooperHewitt-Bold.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-Bold.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D4C66FC6F06D49479D8ABAB9 /* CooperHewitt-BoldItalic.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-BoldItalic.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3CDA0548649248DFB4A92BB7 /* CooperHewitt-Book.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-Book.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-Book.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		09565274270A4ECDAF90BB4D /* CooperHewitt-BookItalic.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-BookItalic.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-BookItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		956C4ACF18714736B4FF5279 /* CooperHewitt-Heavy.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-Heavy.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-Heavy.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		91EA1566028241D6BEEA29D7 /* CooperHewitt-HeavyItalic.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-HeavyItalic.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-HeavyItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F55F4047A2B840058EBC9EA8 /* CooperHewitt-Light.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-Light.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		642794290AEB46F9B882AA46 /* CooperHewitt-LightItalic.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-LightItalic.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C14612733BB949D18B2E4F21 /* CooperHewitt-Medium.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-Medium.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9FA477FD4DB44282A0DF5C78 /* CooperHewitt-MediumItalic.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-MediumItalic.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BDF3690F65A14000936D978E /* CooperHewitt-Semibold.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-Semibold.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-Semibold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		34B350BC08E84673B34209F5 /* CooperHewitt-SemiboldItalic.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-SemiboldItalic.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-SemiboldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D0D4130BA4CF453697123932 /* CooperHewitt-Thin.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-Thin.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F7EFE00721214F3998AA6196 /* CooperHewitt-ThinItalic.ttf */ = {isa = PBXFileReference; name = "CooperHewitt-ThinItalic.ttf"; path = "../src/assets/fonts/CooperHewitt/CooperHewitt-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +250,20 @@
 				853E3A6C86B04BB6971E728E /* Octicons.ttf */,
 				F92EF9CE99EE49919E8DC4D8 /* SimpleLineIcons.ttf */,
 				BE928FE9C7F44FBC86027FB7 /* Zocial.ttf */,
+				95BE3D16936A4800A9E687B2 /* CooperHewitt-Bold.ttf */,
+				D4C66FC6F06D49479D8ABAB9 /* CooperHewitt-BoldItalic.ttf */,
+				3CDA0548649248DFB4A92BB7 /* CooperHewitt-Book.ttf */,
+				09565274270A4ECDAF90BB4D /* CooperHewitt-BookItalic.ttf */,
+				956C4ACF18714736B4FF5279 /* CooperHewitt-Heavy.ttf */,
+				91EA1566028241D6BEEA29D7 /* CooperHewitt-HeavyItalic.ttf */,
+				F55F4047A2B840058EBC9EA8 /* CooperHewitt-Light.ttf */,
+				642794290AEB46F9B882AA46 /* CooperHewitt-LightItalic.ttf */,
+				C14612733BB949D18B2E4F21 /* CooperHewitt-Medium.ttf */,
+				9FA477FD4DB44282A0DF5C78 /* CooperHewitt-MediumItalic.ttf */,
+				BDF3690F65A14000936D978E /* CooperHewitt-Semibold.ttf */,
+				34B350BC08E84673B34209F5 /* CooperHewitt-SemiboldItalic.ttf */,
+				D0D4130BA4CF453697123932 /* CooperHewitt-Thin.ttf */,
+				F7EFE00721214F3998AA6196 /* CooperHewitt-ThinItalic.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -361,8 +403,7 @@
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 2G3WFE7R7N;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					2D02E48F1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -424,6 +465,20 @@
 				C0FBEEB74FBA4016ADC60203 /* Octicons.ttf in Resources */,
 				B395C179720744B784301089 /* SimpleLineIcons.ttf in Resources */,
 				71EADD4B10054B7E834AB105 /* Zocial.ttf in Resources */,
+				786AD7FD53654AAAB006350A /* CooperHewitt-Bold.ttf in Resources */,
+				3A2FEE388EF4454CA393C70A /* CooperHewitt-BoldItalic.ttf in Resources */,
+				8641EAB2781542F2AEC6A076 /* CooperHewitt-Book.ttf in Resources */,
+				90C7DB0F74D1404098758FF8 /* CooperHewitt-BookItalic.ttf in Resources */,
+				C7E3C9B1BAE5476CB253CD60 /* CooperHewitt-Heavy.ttf in Resources */,
+				FF5FEDD89E1F4AA0A8D7BA5C /* CooperHewitt-HeavyItalic.ttf in Resources */,
+				829AD6DDD869421D85460EDB /* CooperHewitt-Light.ttf in Resources */,
+				1F6EA9BF777744A885077392 /* CooperHewitt-LightItalic.ttf in Resources */,
+				4B63B9AA89FB4217A43EE029 /* CooperHewitt-Medium.ttf in Resources */,
+				3B0EF616FBE447708796D7FB /* CooperHewitt-MediumItalic.ttf in Resources */,
+				265E59DFCFFE479FAFB48ADB /* CooperHewitt-Semibold.ttf in Resources */,
+				4F311B7849EF4E88A92DBC66 /* CooperHewitt-SemiboldItalic.ttf in Resources */,
+				CD87929D11554CA2A1EC04A1 /* CooperHewitt-Thin.ttf in Resources */,
+				201646B93F1649B68E23A9C7 /* CooperHewitt-ThinItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -807,8 +862,9 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 2G3WFE7R7N;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "WhenDidIDoIt-tvOS/Info.plist";
@@ -820,6 +876,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.WhenDidIDoIt-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
@@ -835,9 +892,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 2G3WFE7R7N;
+				DEVELOPMENT_TEAM = "";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "WhenDidIDoIt-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -848,6 +906,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.WhenDidIDoIt-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;

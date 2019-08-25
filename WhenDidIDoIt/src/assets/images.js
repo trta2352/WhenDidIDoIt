@@ -14,6 +14,10 @@ const images = {
     folder: require('./images/folder.svg'),
     info: require('./images/info.svg'),
     x: require('./images/x.svg'),
+    archive: require('./images/archive.svg'),
+    home: require('./images/home.svg'),
+    sliders: require('./images/sliders.svg'),
+    calendar: require('./images/calendar.svg')
 }
 
 export default images;

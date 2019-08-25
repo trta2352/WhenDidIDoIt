@@ -6,6 +6,7 @@ import Modal from 'react-native-modal';
 
 import Button from '../buttons/addBtn';
 import images from '../../assets/images';
+import colors from '../../styles/colors';
 
 class AreYouSureAlert extends React.Component {
     constructor(props) {
@@ -34,15 +35,19 @@ class AreYouSureAlert extends React.Component {
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 40, paddingRight: 40, paddingBottom: 20}}>
                     <Button text={leftBtnTitle}
                         onPress = {()=> choiceBtn(false)}
-                        width={110}
-                        height={46}
-                        textSize={14}/>
+                        width = {110}
+                        height = {46}
+                        backgroundColor = {colors.cancelBtnBackground}
+                        textColor = {colors.cancelBtnText}
+                        textSize = {14}/>
                     <Button 
                         text={rightBtnTitle}
                         onPress = {()=> choiceBtn(true)}
-                        width={110}
-                        height={46}
-                        textSize={14}/>
+                        width = {110}
+                        height = {46}
+                        backgroundColor = {colors.addBtnBackground}
+                        textColor = {colors.addBtnText}
+                        textSize = {14}/>
                 </View>
             </View>
             </Modal>

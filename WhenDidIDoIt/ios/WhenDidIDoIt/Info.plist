@@ -75,6 +75,20 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>CooperHewitt-Bold.ttf</string>
+		<string>CooperHewitt-BoldItalic.ttf</string>
+		<string>CooperHewitt-Book.ttf</string>
+		<string>CooperHewitt-BookItalic.ttf</string>
+		<string>CooperHewitt-Heavy.ttf</string>
+		<string>CooperHewitt-HeavyItalic.ttf</string>
+		<string>CooperHewitt-Light.ttf</string>
+		<string>CooperHewitt-LightItalic.ttf</string>
+		<string>CooperHewitt-Medium.ttf</string>
+		<string>CooperHewitt-MediumItalic.ttf</string>
+		<string>CooperHewitt-Semibold.ttf</string>
+		<string>CooperHewitt-SemiboldItalic.ttf</string>
+		<string>CooperHewitt-Thin.ttf</string>
+		<string>CooperHewitt-ThinItalic.ttf</string>
 	</array>
 </dict>
 </plist>

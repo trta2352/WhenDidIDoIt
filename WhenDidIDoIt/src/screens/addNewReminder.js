@@ -239,7 +239,7 @@ class AddNewReminder extends PureComponent {
                 placeholder={'Cleaned room'}
                 containerStyle={globalStyle.inputContainerWithDate}
                 inputContainerStyle={{
-                    borderBottomWidth: 0
+                    borderBottomWidth: 0, 
                 }}
                 inputStyle={globalStyle.inputText}
                 value={this.state.pastTime}
@@ -248,7 +248,7 @@ class AddNewReminder extends PureComponent {
                 onSubmitEditing={Keyboard.dismiss}
             />
             <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(1)}>
-                <Image source={images.calendarAlt} style={{width: 35, height: 35, paddingTop:3}}/>
+                <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
             </TouchableOpacity>
         </View>
     );
@@ -267,10 +267,11 @@ class AddNewReminder extends PureComponent {
                 value={this.state.futureTime}
                 onChangeText={(text)=> {this.setState({futureTime: text}); Keyboard.dismiss()}} 
                 onPress={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
+                onFocus={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
                 onSubmitEditing={Keyboard.dismiss}
             />
             <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(2)}>
-                <Image source={images.calendarAlt} style={{width: 35, height: 35, paddingTop:3}}/>
+                <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
             </TouchableOpacity>
         </View>
     );
@@ -321,7 +322,7 @@ class AddNewReminder extends PureComponent {
 
   renderSaveBtnView(){
     return(
-      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40}}>
+      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40, paddingBottom: 300}}>
         {this.renderSaveBtn()}
       </View>
     );

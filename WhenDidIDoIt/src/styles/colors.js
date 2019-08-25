@@ -1,8 +1,8 @@
 const colors = {
-    addBtnBackground: '#1D3557', 
-    addBtnText: '#A8DADC', 
-    cancelBtnBackground: '#E63946', 
-    cancelBtnText: '#1D3557'
+    addBtnBackground: '#323232', 
+    addBtnText: '#ffffff', 
+    cancelBtnBackground: '#8E2424', 
+    cancelBtnText: '#ffffff'
   }
   
   export default colors;

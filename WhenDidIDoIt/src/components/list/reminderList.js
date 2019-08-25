@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import Accordion from 'react-native-collapsible/Accordion';
 import { ScrollView } from 'react-native-gesture-handler';
 import images from '../../assets/images';
+import globalStyle from '../../styles/globalStyle';
 
 class ReminderList extends Component {
   constructor(props) {
@@ -31,48 +32,14 @@ class ReminderList extends Component {
   renderHeaderStyle(item){
     if(this.state.activeSections.length!= 0){
       if(this.state.currentExtendedItem==item.id){
-        return {
-          backgroundColor: '#457B9D',
-          paddingLeft: 10,
-          paddingRight: 10, 
-          flexDirection: 'row', 
-          borderWidth: 0,
-          marginBottom: 0,
-          alignItems: 'center',
-          paddingTop: 10, 
-          paddingBottom: 5,
-          borderTopLeftRadius: 5, 
-          borderTopRightRadius: 5
-        }
+        return globalStyle.extendedHeader
       }
       else {
-        return {
-          backgroundColor: '#457B9D',
-          paddingLeft: 10,
-          paddingRight: 10, 
-          flexDirection: 'row', 
-          borderWidth: 0,
-          marginBottom: 10,
-          alignItems: 'center',
-          paddingTop: 10, 
-          paddingBottom: 10,
-          borderRadius: 5
-        }
+        return globalStyle.normalHeader
       }
     }
     else {
-      return {
-        backgroundColor: '#457B9D',
-        paddingLeft: 10,
-        paddingRight: 10, 
-        flexDirection: 'row', 
-        borderWidth: 0,
-        marginBottom: 10,
-        alignItems: 'center',
-        paddingTop: 10, 
-        paddingBottom: 10,
-        borderRadius: 5
-      }
+      return globalStyle.normalHeader
     }
   }
 
@@ -91,7 +58,7 @@ class ReminderList extends Component {
   getImage = (item) =>{
     if(item.imagePath != null){
       return (
-        <View style = {{ backgroundColor: 'black', borderRadius: 4, marginTop: 5, marginBottom: 5, marginRight: 10, flex: 0.1}}>
+        <View style = {{ borderRadius: 4, marginTop: 5, marginBottom: 5, marginRight: 10, flex: 0.1}}>
           <Image source={{ uri: item.imagePath }} style={{width: 30, height: 40}}/>
         </View>
       );
@@ -110,14 +77,20 @@ class ReminderList extends Component {
       <View style={this.renderHeaderStyle(item)}>
         {this.getImage(item)}
         <View style={styles.middleContainer}>
-          <Text style={styles.subtitle}>
+          <Text style={globalStyle.title}>
             {item.title}
           </Text>
-          <Text style={styles.title}>
+          <Text style={globalStyle.subtitle}>
             {item.whenDidIDoIt}
           </Text>
         </View>
-        <View style={{backgroundColor: '#D1D1D1', paddingRight: 4, borderRadius: 5, paddingLeft: 10, marginLeft: 40, flex: 0.5}}>
+
+      </View>
+    );
+  };
+
+  /*
+          <View style={{backgroundColor: '#D1D1D1', paddingRight: 4, borderRadius: 5, paddingLeft: 10, marginLeft: 40, flex: 0.5}}>
           <View style={styles.rateBtnContainer}>
             <TouchableOpacity style={{paddingRight: 10}} onPress={() =>  this.props.deleteFunc(item.id)}>
               <Image source={images.trash} style={{height: 35, width: 35}}/>
@@ -128,18 +101,18 @@ class ReminderList extends Component {
             <Image source={images.up} style={{height: 45, width: 45}}/>
           </View>
         </View>
-      </View>
-    );
-  };
+  
+  
+  */
 
   renderNormalLine = (leftText, rightText) =>{
     return(
       <View style={stylesInfo.lineContainer}>
         <View style={stylesInfo.leftTextContainer}>
-          <Text style={stylesInfo.leftText}>{leftText}</Text>
+          <Text style={globalStyle.leftText}>{leftText}</Text>
         </View>
         <View style={stylesInfo.rightTextContainer}>
-          <Text style={stylesInfo.rightText}>{rightText}</Text>
+          <Text style={globalStyle.rightText}>{rightText}</Text>
         </View>
       </View>
     );
@@ -147,7 +120,7 @@ class ReminderList extends Component {
 
   _renderContent = item => {
     return (
-      <View style={styles.content}>
+      <View style={globalStyle.content}>
         <View style={stylesInfo.sectionContainer}>
           {this.renderNormalLine('Description', item.description)}
         </View>
@@ -156,6 +129,11 @@ class ReminderList extends Component {
         </View>
         <View style={stylesInfo.sectionContainer}>
           {this.renderNormalLine('When should I do it again?', item.whenShouldIDoItAgain)}
+        </View>
+        <View style = {styles.lastSectionContainer}>
+          <TouchableOpacity>
+            <Text style = {styles.lastSectionText}>EDIT</Text>    
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -204,29 +182,9 @@ ReminderList.propTypes ={
 export default ReminderList
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    flexDirection: 'column', 
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    alignContent: 'center',
-    //backgroundColor: 'blue'
-  }, 
- title: {
-    color: 'white',
-   // fontFamily: 'OpenSans-Semibold',
-    paddingTop: 3, 
-    fontSize: 13,
-  }, 
-  statusIconContainer: {
-   //marginRight: 20, 
-    flex: 0.2
-  },
   middleContainer:{
     flexDirection: 'column',
-    flex: 0.4
+    flex: 0.7
   }, 
   rateBtnContainer: {
     alignItems: 'center',
@@ -234,32 +192,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     flex: 1
   }, 
-  subtitle: {
-    color: '#1D3557',
-   // fontFamily: 'OpenSans-Semibold',
-    fontSize: 17,
-    fontWeight: 'bold',
-  }, 
-  header: {
-    backgroundColor: '#ffffff',
-    padding: 10,
-    flexDirection: 'row', 
-    borderWidth: 0,
-    marginBottom: 10,
-    alignItems: 'center',
-    paddingTop: 20, 
-    paddingBottom: 20,
-  },
-  headerText: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  content: {
-    padding: 10,
-    backgroundColor: '#BBCFDB',
-    marginBottom: 10
-  },
 })
 
 const stylesInfo = StyleSheet.create({
@@ -267,17 +199,6 @@ const stylesInfo = StyleSheet.create({
     flexDirection: 'column', 
     borderBottomWidth: 1,
     borderColor: '#e6edf4', 
-  }, 
-  lastSectionContainer:{
-    alignItems:'center', 
-    justifyContent: 'center', 
-    alignContent: 'center',
-    flex: 1, 
-  },
-  lastSectionText:{
-    color: '#81878d',
-    //fontFamily: 'Nunito-ExtraBold',
-    fontSize: 12,
   }, 
   lineContainer: {
     flexDirection: 'column', 
@@ -290,36 +211,19 @@ const stylesInfo = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start', 
   }, 
-  leftText: {
-    color: 'black',
-    //fontFamily: 'OpenSans-Semibold',
-    fontSize: 15,
-  }, 
   rightTextContainer:{
     justifyContent: 'flex-start',
     alignItems: 'flex-start', 
   }, 
-  rightText:{
-    color: '#34445a',
-  //  fontFamily: 'OpenSans-Semibold',
-    fontSize: 14,
-    paddingTop: 10,
-    paddingBottom: 10
+  lastSectionContainer:{
+    alignItems:'center', 
+    justifyContent: 'center', 
+    alignContent: 'center',
+    flex: 1, 
   },
-  rightTextBill:{
-    color: '#34445a',
-   // fontFamily: 'OpenSans-Semibold',
-    fontSize: 14,
-    paddingBottom: 10
+  lastSectionText:{
+    color: '#81878d',
+    //fontFamily: 'Nunito-ExtraBold',
+    fontSize: 12,
   }, 
-  rightTextBillContainer:{
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end', 
-  }, 
-  rightSpecialText:{
-    color: '#a1acb6',
-   // fontFamily: 'OpenSans-Semibold',
-    fontSize: 14,
-    paddingBottom: 10
-  }
 })
