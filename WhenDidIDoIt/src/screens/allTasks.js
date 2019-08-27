@@ -19,7 +19,7 @@ import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
 import images from '../assets/images.js';
 
-class Home extends Component {
+class AllTasks extends Component {
   constructor(props) {
     super(props);
 
@@ -122,20 +122,7 @@ class Home extends Component {
 
   renderAddNewReminderBtn(){
     return (
-      <AddBtn 
-        text="ADD"
-        onPress = {()=> {this.openAddNewReminderScreen(-1)}}
-        width={150}
-        height={40}
-        textSize={14}
-        backgroundColor={colors.addBtnBackground}
-        textColor={colors.addBtnText}
-      />
-    );
-  }
-  renderInfoBtn(){
-    return (
-      <TouchableOpacity onPress={()=> this.setState({missingInputVisible: !this.state.missingInputVisible})} style={globalStyle.addNewReminderPlusBtn}>
+      <TouchableOpacity onPress={()=> this.openAddNewReminderScreen(-1)} style={globalStyle.addNewReminderPlusBtn}>
         <Image source={images.plus} style={{width: 40, height: 40}}/>
       </TouchableOpacity>
     );
@@ -205,12 +192,12 @@ class Home extends Component {
             <Text style={globalStyle.mainTitleStyle}>When Did I Do It?</Text>
           </View>
           <View style={styles.rightTopContainer}>
-            <Text style = {globalStyle.screeTitleStyle}>TODO</Text>
+            <Text style = {globalStyle.screeTitleStyle}>ALL TASKS</Text>
           </View>
         </View>
         {this.renderCorrectView()}
         <View style = {styles.infoBtnStyle}>
-          {this.renderInfoBtn()}
+          {this.renderAddNewReminderBtn()}
           {this.renderAreYouSureAlert()}
           {this.renderInfoAlert()}
         </View>
@@ -219,7 +206,7 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default AllTasks
 
 const styles = StyleSheet.create({
   topContainer: {

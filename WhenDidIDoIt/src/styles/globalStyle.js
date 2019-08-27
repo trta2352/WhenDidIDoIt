@@ -3,18 +3,29 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 17,
+    padding: 15,
     flexDirection: 'column', 
     alignContent: 'center',
     backgroundColor: '#ffffff'
   },
+  addNewReminderPlusBtn: {
+    backgroundColor: '#8E2424', 
+    padding: 10, 
+    borderRadius: 50,
+  },
   //shown at the top of the screen
-  mainTitleStyle:{
-    fontSize: 22, 
+  mainTitleStyle: {
+    fontSize: 21, 
     color: '#7f7f7f', 
     fontWeight: 'bold',
     fontFamily: 'CooperHewitt-Bold', 
   }, 
+  screeTitleStyle: {
+    fontSize: 27, 
+    color: '#064c5d', 
+    fontWeight: 'bold',
+    fontFamily: 'CooperHewitt-Bold', 
+  },
   inputContainer: {
     borderColor: '#e5e5e5', 
     borderBottomWidth: 1,
@@ -101,6 +112,11 @@ export default StyleSheet.create({
     borderTopLeftRadius: 20, 
     borderTopRightRadius: 20
   }, 
+  lastSectionText: {
+    color: '#81878d',
+    fontFamily: 'CooperHewitt-Semibold',
+    fontSize: 12,
+  },
   //bottomTabNavigator
   bottomTabNavigator:{
     backgroundColor: '#ffffff',

@@ -4,19 +4,24 @@ import {
   Platform, 
   View, 
   Text, 
-  TouchableOpacity
+  TouchableOpacity, 
+  Dimensions
 } from 'react-native';
 
 import Image from 'react-native-remote-svg'
 import {createStackNavigator, createAppContainer, HeaderBackButton, createMaterialTopTabNavigator, createSwitchNavigator, createBottomTabNavigator} from 'react-navigation';
-import homeScreen from './screens/home.js'
 
+import homeScreen from './screens/home.js'
 import AddReminderScreen from './screens/addNewReminder.js'
 import CameraScreen from './screens/cameraScreen.js'
 import HistoryScreen from './screens/history.js'
 import SettingsScreen from './screens/settings'
 import images from './assets/images.js';
 import globalStyle from './styles/globalStyle.js';
+import AllTasksScreen from './screens/allTasks.js'
+
+const windowWidth = Dimensions.get("window").width;
+const tabWidth = windowWidth / 4;
 
 const homeStack = createStackNavigator(
     {
@@ -51,7 +56,22 @@ const tabsNavigator = createBottomTabNavigator({
             }
         }
     },
-    history: {
+    allTasks: {
+        screen: AllTasksScreen, 
+        navigationOptions: {
+            tabBarLabel: 'ALL TASKS', 
+            tabBarIcon: (values) => {
+                return (
+                    <View style = {{flexDirection: 'column', alignItems: 'center'}}>
+                        <Image source={images.archive} style={{width: 20, height: 20}}/>
+                        <Text style = {globalStyle.tabLabel}>ALL TASKS</Text>
+                        <View style={{width: 5, height: 5, borderRadius: 20, backgroundColor: values.tintColor}}></View>
+                    </View>
+                )
+            }
+        }
+    },
+    /*history: {
         screen: HistoryScreen, 
         navigationOptions: {
             tabBarLabel: 'HISTORY', 
@@ -65,7 +85,7 @@ const tabsNavigator = createBottomTabNavigator({
                 )
             }
         }
-    },
+    },*/
     settings: {
         screen: SettingsScreen, 
         navigationOptions: {

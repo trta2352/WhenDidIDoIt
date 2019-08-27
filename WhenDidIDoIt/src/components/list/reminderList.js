@@ -131,9 +131,18 @@ class ReminderList extends Component {
           {this.renderNormalLine('When should I do it again?', item.whenShouldIDoItAgain)}
         </View>
         <View style = {styles.lastSectionContainer}>
-          <TouchableOpacity>
-            <Text style = {styles.lastSectionText}>EDIT</Text>    
-          </TouchableOpacity>
+          <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5}}>
+            <TouchableOpacity style = {{alignItems: 'center'}} onPress = {() => this.props.editFunc(item.id)}>
+              <Image source={images.edit2} style={{width: 20, height: 27}}/>
+              <Text style = {globalStyle.lastSectionText}>EDIT</Text>    
+            </TouchableOpacity>
+          </View>
+          <View style={{justifyContent: 'center', alignItems: 'center', flex: 0.5, alignContent: 'center'}}>
+            <TouchableOpacity style = {{alignItems: 'center'}} onPress = {() => this.props.deleteFunc(item.id)}>
+              <Image source={images.calendar} style={{width: 20, height: 27}}/>
+              <Text style = {globalStyle.lastSectionText}>REMOVE</Text>    
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -192,6 +201,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     flex: 1
   }, 
+  lastSectionContainer:{
+    alignItems:'center', 
+    justifyContent: 'center', 
+    alignContent: 'center',
+    flexDirection: 'row',
+    paddingTop: 5,
+    flex: 1, 
+  },
 })
 
 const stylesInfo = StyleSheet.create({
@@ -215,15 +232,5 @@ const stylesInfo = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start', 
   }, 
-  lastSectionContainer:{
-    alignItems:'center', 
-    justifyContent: 'center', 
-    alignContent: 'center',
-    flex: 1, 
-  },
-  lastSectionText:{
-    color: '#81878d',
-    //fontFamily: 'Nunito-ExtraBold',
-    fontSize: 12,
-  }, 
+ 
 })

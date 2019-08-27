@@ -17,7 +17,8 @@ const images = {
     archive: require('./images/archive.svg'),
     home: require('./images/home.svg'),
     sliders: require('./images/sliders.svg'),
-    calendar: require('./images/calendar.svg')
+    calendar: require('./images/calendar.svg'),
+    plus: require('./images/plus.svg')
 }
 
 export default images;
