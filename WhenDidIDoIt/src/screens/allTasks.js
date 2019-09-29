@@ -128,24 +128,59 @@ class AllTasks extends Component {
     );
   }
 
-  renderCorrectView(){
-    if(this.state.realData.length!=0){
-      return (
-          <ScrollView>
-            <Reminderlist data={this.state.realData} deleteFunc={(id)=> this.deleteFunc(id)} editFunc={(id)=> this.editFunc(id)}/>
+  renderTodoSection = () =>{
+    return (
+      <View>
+        <Text style = {globalStyle.aboveListTitle}>DO NOW </Text>
+        <ScrollView>
+            <Reminderlist data = {this.state.realData} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
           </ScrollView>
+      </View>
+    );
+  }
+
+  renderNextWeekSection = () =>{
+    return (
+      <View>
+        <Text style = {globalStyle.aboveListTitle}>DO NEXT WEEK </Text>
+        <ScrollView>
+            <Reminderlist data = {this.state.realData} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
+          </ScrollView>
+      </View>
+    );
+  }
+
+  renderOtherSection = () =>{
+    return (
+      <View>
+        <Text style = {globalStyle.aboveListTitle}>DO SOMETIME LATER</Text>
+        <ScrollView>
+            <Reminderlist data = {this.state.realData} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
+          </ScrollView>
+      </View>
+    );
+  }
+
+  renderCorrectView(){
+    if(this.state.realData.length != 0){
+      return (
+        <ScrollView>
+          {this.renderTodoSection()}
+          {this.renderNextWeekSection()}
+          {this.renderOtherSection()}
+        </ScrollView>
       );
     }
     else {
-      if(this.state.isLoadingIndicatorVisible==true){
+      if(this.state.isLoadingIndicatorVisible == true){
         return (
-          <ActivityIndicator size="large" color="#0000ff" hidesWhenStopped={this.state.isLoadingIndicatorVisible}/>
+          <ActivityIndicator size = "large" color = "#0000ff" hidesWhenStopped = {this.state.isLoadingIndicatorVisible}/>
         );
       }
       else {
         return (
-          <View style={{textAlign: 'center', justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{textAlign: 'center', fontSize: 17, color: 'black'}}>You have no saved tasks. Add new ones and they will appear here.</Text>
+          <View style = {{textAlign: 'center', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style = {{textAlign: 'center', fontSize: 17, color: 'black'}}>You have no saved tasks. Add new ones and they will appear here.</Text>
           </View>
         );
       }

@@ -4,217 +4,339 @@ import {
   Text,
   StyleSheet, 
   Platform, 
-  TouchableOpacity, 
+  Keyboard,
+  TouchableOpacity,
   ScrollView, 
   ActivityIndicator
 } from 'react-native'
-import Image from 'react-native-remote-svg'
+import {  Input } from 'react-native-elements';
+import Image from 'react-native-remote-svg';
 
-import AddBtn from '../components/buttons/addBtn.js'
-import Reminderlist from '../components/list/reminderList.js'
+import AddBtn from '../components/buttons/addBtn.js';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import DBManager from '../utils/dbManager.js'
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
-import InfoAlert from '../components/alert/infoAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
+import ImagePicker from 'react-native-image-picker';
 import images from '../assets/images.js';
+import RNPickerSelect from 'react-native-picker-select';
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state={
-      data: [
-        {
-          id: 1, 
-          title: 'Clean my room', 
-          description: 'I Cleaned my room last week. It was super fun. I should do it again sooon!', 
-          whenDidIDoIt: '14.3.2019 14:00', 
-          whenShouldIDoItAgain: '14.4.2019 14:00'
-        }, 
-      ], 
-      realData: [], 
+      isDateTimePickerVisible: false, 
+      id: 0, 
+      title: '', 
+      description: '', 
+      pastTime: '', 
+      futureTime: '', 
+      currentVisible: 0, 
       areYousureAlertVisible: false, 
-      missingInputVisible: false, 
       choiceId: 0, 
-      isLoadingIndicatorVisible: true
+      path: null,
+      shouldStartTheIndicator: false, 
+      selectedPickerValue: null
     }
   }
 
-  renderInfoAlert = () =>{
-    return (
-      <InfoAlert 
-        isVisible={this.state.missingInputVisible}
-        callback ={()=> this.setState({missingInputVisible: !this.state.missingInputVisible})}
-        titleText={"Some information about the application"}
-        subtitleText={'This application was developed as a side project. Additional information will be added here. '}
-        />
-    );
-  }
-
-  updatedData(isUpdate){
-    (async () => {
-      let temp = await DBManager.getAll()
-      if(temp != false){
-        this.setState({realData: temp})
-      }
-      else{
-        if(isUpdate){
-          this.setState({
-            realData: []
-          })
+  componentDidMount(){
+    if(this.props.navigation.state.params != null){
+      let item = this.props.navigation.state.params;
+      this.setState({
+        id: item.id, 
+        title: item.title,
+        description: item.description, 
+        pastTime: item.whenDidIDoIt, 
+        futureTime: item.whenShouldIDoItAgain,
+        path: item.imagePath
+      })
+    }
+    else {
+      (async () => {
+        let temp = await DBManager.getLastKey();
+        if(temp==null){
+            this.setState({id: 1})
         }
-        this.setState({
-          isLoadingIndicatorVisible: false
-        })
-      }
-    })();
-
-    
+        else {
+            this.setState({id: temp})
+        }
+      })();
+    }
   }
+
+  _showDateTimePicker = (pickerId) => this.setState({ isDateTimePickerVisible: true, currentVisible: pickerId });
+
+  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+
+  _handleDatePicked = (date) => {
+    if(this.state.currentVisible==1){
+        this.setState({pastTime: date.toDateString(), currentVisible: 0})
+    }
+    else {
+        this.setState({futureTime: date.toDateString(), currentVisible: 0})
+    }
+    this._hideDateTimePicker();
+  };
 
   renderAreYouSureAlert = () =>{
     return (
       <AreYouSureAlert 
         isVisible={this.state.areYousureAlertVisible}
         callback ={()=> this.setState({areYousureAlertVisible: !this.state.areYousureAlertVisible})}
-        choiceBtn = {(choice)=> { this.deleteItem(choice)}}
-        titleText={'REMOVE'}
-        //subtitleText ={"Ali ste prepričani, da se želite odjaviti?"}
+        choiceBtn = {(choice)=> { this.handleBackButton(choice)}}
+        titleText={'GO BACK'}
+        subtitleText ={"Are you sure you want to go back? Unsaved changes will be lost."}
         leftBtnTitle = {'Cancel'}
-        rightBtnTitle = {'Remove'}
+        rightBtnTitle = {'Go back'}
         />
     );
   }
 
-  componentDidMount = () =>{
-   this.updatedData();
-    this.willFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
-      () => {
-        this.updatedData(true);
+  saveBtnPressed() {
+    (async () => {
+      const reminder = {
+        id: this.state.id,
+        'title': this.state.title,
+        'description': this.state.description,
+        'whenDidIDoIt': this.state.pastTime,
+        'whenShouldIDoItAgain': this.state.futureTime,
+        'imagePath': this.state.path
       }
-    );
-    this.setState({isLoadingIndicatorVisible: true})
-  }
 
-  componentDidMount() {
-    this.willFocusSubscription.remove();
-  }
-
-  componentWillUnmount() {
-    this.willFocusSubscription.remove();
-  }
-  
-  openAddNewReminderScreen(id){
-    if(id!=-1){
-      for(var i = 0;i< this.state.realData.length;i++){
-        if (this.state.realData[i].id== id){
-          let item = this.state.realData[i];
-          this.props.navigation.navigate('AddReminder', item);    
-        }
+      let temp = await DBManager.save(reminder)
+      if (temp) {
+        this.props.navigation.goBack();
+      } else {
+        console.log("Shranjevanje ni uspelo");
       }
+    })();
+  }
+
+  renderAddPhotoBtn = () => {
+    return (
+      /*<AddBtn 
+        text = "ADD PHOTO"
+        onPress = {()=> {this.setState({shouldStartTheIndicator: true}); this.showImagePicker()}}
+        width = {140}
+        height = {40}
+        textSize = {13}
+        backgroundColor = {colors.addBtnBackground}
+        textColor = {colors.addBtnText}
+      />*/
+      <TouchableOpacity onPress = {() => {this.setState({shouldStartTheIndicator: true}); this.showImagePicker()}}>
+        <Image source = {images.camera} style = {{height: 50, width: 50}}/>
+      </TouchableOpacity>
+      );
+  } 
+
+  showImagePicker = () => {
+    const options = {
+      title: 'Select task/reminder images.',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+        cameraRoll: true
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      this.setState({
+        path: response.uri
+        })
+      
+      if (response.didCancel) {
+        this.setState({shouldStartTheIndicator: false})
+      } else if (response.error) {
+        this.setState({shouldStartTheIndicator: false})
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        this.setState({shouldStartTheIndicator: false})
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        this.setState({shouldStartTheIndicator: false})
+        console.log('Response = ', response);
+        this.setState({
+          path: response.uri
+        })
+      }
+    });
+  }
+
+  renderSelectedImage = () =>{
+    if(this.state.path != null){
+      this.setState({shouldStartTheIndicator: false})
+      return(
+        <TouchableOpacity style = {{ backgroundColor: 'black', borderRadius: 4, marginTop: 5, marginBottom: 5}} onPress = {() => {this.showImagePicker(); this.setState({shouldStartTheIndicator: true, path: null})}}>
+           <Image source={{ uri: this.state.path }} style={{width: 170, height: 227}}/>
+        </TouchableOpacity>
+      );
     }
-    else{
-      this.props.navigation.navigate('AddReminder');
+    else if(this.state.shouldStartTheIndicator){
+      return(
+        <ActivityIndicator size="large" color="#064c5d" />
+      );
     }
   }
 
-  renderAddNewReminderBtn(){
+  renderSaveBtn = () => {
     return (
       <AddBtn 
-        text="ADD"
-        onPress = {()=> {this.openAddNewReminderScreen(-1)}}
-        width={150}
-        height={40}
-        textSize={14}
-        backgroundColor={colors.addBtnBackground}
-        textColor={colors.addBtnText}
+        text = "SAVE"
+        onPress = {()=> {this.saveBtnPressed()}}
+        width = {130}
+        height = {40}
+        textSize = {14}
+        backgroundColor = {colors.addBtnBackground}
+        textColor = {colors.addBtnText}
       />
     );
   }
-  renderInfoBtn(){
+
+  renderDateTimePicker(id){
     return (
-      <TouchableOpacity onPress={()=> this.setState({missingInputVisible: !this.state.missingInputVisible})} style={globalStyle.addNewReminderPlusBtn}>
-        <Image source={images.plus} style={{width: 40, height: 40}}/>
-      </TouchableOpacity>
+      <DateTimePicker
+        isVisible={this.state.isDateTimePickerVisible}
+        onConfirm={(date)=>this._handleDatePicked(date, id)}
+        onCancel={this._hideDateTimePicker}
+        is24Hour={true}
+        mode={'datetime'}
+      />
+    );
+  }
+  
+  renderPicker = () =>{
+    return(
+      <RNPickerSelect
+      onValueChange={(value) => this.setState({selectedPickerValue: value})}
+      style={pickerSelectStyles}
+      items={[
+          { label: 'daily', value: '1' },
+          { label: 'weekly', value: '2' },
+          { label: 'monthly', value: '3' },
+      ]}></RNPickerSelect>  
     );
   }
 
-  renderCorrectView(){
-    if(this.state.realData.length!=0){
-      return (
-          <ScrollView>
-            <Reminderlist data={this.state.realData} deleteFunc={(id)=> this.deleteFunc(id)} editFunc={(id)=> this.editFunc(id)}/>
-          </ScrollView>
-      );
-    }
-    else {
-      if(this.state.isLoadingIndicatorVisible==true){
-        return (
-          <ActivityIndicator size="large" color="#0000ff" hidesWhenStopped={this.state.isLoadingIndicatorVisible}/>
-        );
-      }
-      else {
-        return (
-          <View style={{textAlign: 'center', justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{textAlign: 'center', fontSize: 17, color: 'black'}}>You have no saved tasks. Add new ones and they will appear here.</Text>
-          </View>
-        );
-      }
-    }
+  renderPastInput(){
+    return (
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
+        <Input 
+          placeholder={'Cleaned room'}
+          containerStyle={globalStyle.inputContainerWithDate}
+          inputContainerStyle={{
+              borderBottomWidth: 0, 
+          }}
+          inputStyle={globalStyle.inputText}
+          value={this.state.pastTime}
+          onChangeText={(text)=> {this.setState({pastTime: text}); Keyboard.dismiss()}} 
+          onFocus={()=>{this._showDateTimePicker(1); Keyboard.dismiss()}}
+          onSubmitEditing={Keyboard.dismiss}
+        />
+        <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(1)}>
+            <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
-  editFunc(id){
-    this.openAddNewReminderScreen(id)
+  renderFutureInput(){
+    return (
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
+        <Input 
+          placeholder={'When do I need to do it again'}
+          containerStyle={globalStyle.inputContainerWithDate}
+          inputContainerStyle={{
+              borderBottomWidth: 0
+          }}
+          inputStyle={globalStyle.inputText}
+          value={this.state.futureTime}
+          onChangeText={(text)=> {this.setState({futureTime: text}); Keyboard.dismiss()}} 
+          onPress={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
+          onFocus={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
+            onSubmitEditing={Keyboard.dismiss}
+        />
+        <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(2)}>
+            <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
+        </TouchableOpacity>
+      </View>
+    )
   }
 
-  deleteFunc(id){
-    this.setState({choiceId: id, areYousureAlertVisible: true})
+  renderInputFields(){
+    return(
+      <View style={{paddingTop:-100}}>
+        <Text style={globalStyle.inputFieldTitle}>Task title</Text>
+        <Input 
+          placeholder={'Cleaned room'}
+          containerStyle={globalStyle.inputContainer}
+          inputContainerStyle={{
+            borderBottomWidth: 0
+          }}
+          inputStyle={globalStyle.inputText}
+          value={this.state.title}
+          onChangeText={(text)=> this.setState({title: text})} 
+        />
+        <Text style={globalStyle.inputFieldTitle}>Description</Text>
+        <Input 
+          placeholder={'Big room clean up'}
+          containerStyle={globalStyle.inputContainer}
+          inputContainerStyle={{
+            borderBottomWidth: 0
+          }}
+          inputStyle={globalStyle.inputText}
+          value={this.state.description}
+          onChangeText={(text)=> this.setState({description: text})} 
+        />
+        <Text style={globalStyle.inputFieldTitle}>When did I do it?</Text>
+        {this.renderPastInput()}
+        <Text style={globalStyle.inputFieldTitle}>When should I do it again?</Text>
+        {this.renderFutureInput()}
+        <Text style={globalStyle.inputFieldTitle}>Is it a repeating task?</Text>
+        {this.renderPicker()}
+      </View>
+    )
   }
 
-  removeFromCurrentList(){
-    for(var i= 0; i< this.state.realData.length; i++){
-      if (this.state.realData[i].id == this.state.choiceId){
-        var tempArray = this.state.realData.splice(i, 1);
-        this.setState({realData: tempArray});
-      }
-    }
+  renderImageViewAndBtn = () =>{
+    return(
+      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40}}>
+        {this.renderSelectedImage()}
+        {this.renderAddPhotoBtn()}
+      </View>
+    );
   }
 
-  deleteItem(choice){
-    this.setState({areYousureAlertVisible: false});
-    if(choice==true){
-      (async () => {
-        let temp = await DBManager.remove(this.state.choiceId)
-        if(temp){
-          this.updatedData(true)
-          this.removeFromCurrentList();
-       }
-      })();
-    }
-    else {
-    }
+
+  renderSaveBtnView(){
+    return(
+      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40, paddingBottom: 300}}>
+        {this.renderSaveBtn()}
+      </View>
+    );
   }
 
   render() {
     return (
       <View style={globalStyle.container}>
-        <View style={styles.topContainer}>
+       <View style={styles.topContainer}>
           <View style={styles.leftTopContainer}>
             <Text style={globalStyle.mainTitleStyle}>When Did I Do It?</Text>
           </View>
           <View style={styles.rightTopContainer}>
-            <Text style = {globalStyle.screeTitleStyle}>TODO</Text>
+            <Text style = {globalStyle.screeTitleStyle}>New reminder</Text>
           </View>
         </View>
-        {this.renderCorrectView()}
-        <View style = {styles.infoBtnStyle}>
-          {this.renderInfoBtn()}
-          {this.renderAreYouSureAlert()}
-          {this.renderInfoAlert()}
-        </View>
-      </View>
+      <ScrollView style={{flex: 0.7}}>
+       {this.renderInputFields()}
+       {this.renderImageViewAndBtn()}
+       {this.renderSaveBtnView()}
+       {this.renderDateTimePicker()}
+       {this.renderAreYouSureAlert()}
+      </ScrollView>
+    </View>
     )
   }
 }
@@ -226,7 +348,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     justifyContent: 'space-between', 
     alignItems: 'center', 
-    marginBottom: 30,
+    marginBottom: 20,
     ...Platform.select({
       ios: {
         marginTop: 50, 
@@ -235,19 +357,55 @@ const styles = StyleSheet.create({
       android:{
         marginTop: 20, 
       }
-    })
+    }), 
   }, 
   leftTopContainer: {
     justifyContent: 'flex-start', 
   }, 
   rightTopContainer: {
-    flex: 1,
-    justifyContent: 'center', 
-    alignItems: 'center'
+    justifyContent: 'flex-end', 
+    paddingRight: 20
   }, 
-  infoBtnStyle: {
-    position: 'absolute', 
-    bottom: 100, 
-    right: 30, 
-  }
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  capture: {
+    marginTop: 40,
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    margin: 20,
+  },
 })
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderColor: '#e5e5e5',
+    borderRadius: 4,
+    fontSize: 12, 
+    fontWeight: 'bold',
+    color: '#72767A',
+    fontFamily: 'CooperHewitt-Light',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 12, 
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'purple',
+    borderRadius: 8,
+    fontWeight: 'bold',
+    color: '#72767A',
+    fontFamily: 'CooperHewitt-Light',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});

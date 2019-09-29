@@ -44,12 +44,12 @@ const tabsNavigator = createBottomTabNavigator({
     home: { 
         screen: homeStack,
         navigationOptions: {
-            tabBarLabel: 'HOME',
+            tabBarLabel: 'ADD',
             tabBarIcon: (values) => {
                 return (
                     <View style = {{flexDirection: 'column', alignItems: 'center'}}>
                         <Image source={images.home} style={{width: 20, height: 20}}/>
-                        <Text style = {globalStyle.tabLabel}>HOME</Text>
+                        <Text style = {globalStyle.tabLabel}>ADD</Text>
                         <View style={{width: 5, height: 5, borderRadius: 20, backgroundColor: values.tintColor}}></View>
                     </View>
                 )
@@ -71,21 +71,6 @@ const tabsNavigator = createBottomTabNavigator({
             }
         }
     },
-    /*history: {
-        screen: HistoryScreen, 
-        navigationOptions: {
-            tabBarLabel: 'HISTORY', 
-            tabBarIcon: (values) => {
-                return (
-                    <View style = {{flexDirection: 'column', alignItems: 'center'}}>
-                        <Image source={images.archive} style={{width: 20, height: 20}}/>
-                        <Text style = {globalStyle.tabLabel}>HISTORY</Text>
-                        <View style={{width: 5, height: 5, borderRadius: 20, backgroundColor: values.tintColor}}></View>
-                    </View>
-                )
-            }
-        }
-    },*/
     settings: {
         screen: SettingsScreen, 
         navigationOptions: {

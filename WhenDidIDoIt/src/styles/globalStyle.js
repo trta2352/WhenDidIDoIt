@@ -21,7 +21,7 @@ export default StyleSheet.create({
     fontFamily: 'CooperHewitt-Bold', 
   }, 
   screeTitleStyle: {
-    fontSize: 27, 
+    fontSize: 24, 
     color: '#064c5d', 
     fontWeight: 'bold',
     fontFamily: 'CooperHewitt-Bold', 
@@ -52,6 +52,12 @@ export default StyleSheet.create({
     color: '#7f7f7f', 
     //fontWeight: 'bold',
     fontFamily: 'CooperHewitt-Semibold'
+  }, 
+  aboveListTitle: {
+    color: 'black',
+    fontSize: 30,
+    fontFamily: 'CooperHewitt-Semibold',
+    paddingTop: 10
   }, 
   //list
   leftText: {

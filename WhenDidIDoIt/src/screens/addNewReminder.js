@@ -37,7 +37,8 @@ class AddNewReminder extends PureComponent {
       areYousureAlertVisible: false, 
       choiceId: 0, 
       path: null,
-      shouldStartTheIndicator: false
+      shouldStartTheIndicator: false, 
+      selectedPickerValue: null
     }
   }
   
@@ -231,50 +232,64 @@ class AddNewReminder extends PureComponent {
       />
     );
   }
+  
+  renderPicker = () =>{
+    /*return(
+      <Picker
+        selectedValue={this.state.selectedPickerValue}
+        style={{height: 50, width: 100}}
+        onValueChange={(itemValue, itemIndex) =>
+          this.setState({selectedPickerValue: itemValue})
+        }>
+        <Picker.Item label="Java" value="java" />
+        <Picker.Item label="JavaScript" value="js" />
+      </Picker>
+    );*/
+  }
 
   renderPastInput(){
     return (
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
-            <Input 
-                placeholder={'Cleaned room'}
-                containerStyle={globalStyle.inputContainerWithDate}
-                inputContainerStyle={{
-                    borderBottomWidth: 0, 
-                }}
-                inputStyle={globalStyle.inputText}
-                value={this.state.pastTime}
-                onChangeText={(text)=> {this.setState({pastTime: text}); Keyboard.dismiss()}} 
-                onFocus={()=>{this._showDateTimePicker(1); Keyboard.dismiss()}}
-                onSubmitEditing={Keyboard.dismiss}
-            />
-            <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(1)}>
-                <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
-            </TouchableOpacity>
-        </View>
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
+        <Input 
+          placeholder={'Cleaned room'}
+          containerStyle={globalStyle.inputContainerWithDate}
+          inputContainerStyle={{
+              borderBottomWidth: 0, 
+          }}
+          inputStyle={globalStyle.inputText}
+          value={this.state.pastTime}
+          onChangeText={(text)=> {this.setState({pastTime: text}); Keyboard.dismiss()}} 
+          onFocus={()=>{this._showDateTimePicker(1); Keyboard.dismiss()}}
+          onSubmitEditing={Keyboard.dismiss}
+        />
+        <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(1)}>
+            <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
+        </TouchableOpacity>
+      </View>
     );
   }
 
   renderFutureInput(){
     return (
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
-            <Input 
-                placeholder={'Cleaned room'}
-                containerStyle={globalStyle.inputContainerWithDate}
-                inputContainerStyle={{
-                    borderBottomWidth: 0
-                }}
-                inputStyle={globalStyle.inputText}
-                value={this.state.futureTime}
-                onChangeText={(text)=> {this.setState({futureTime: text}); Keyboard.dismiss()}} 
-                onPress={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
-                onFocus={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
-                onSubmitEditing={Keyboard.dismiss}
-            />
-            <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(2)}>
-                <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
-            </TouchableOpacity>
-        </View>
-    );
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
+        <Input 
+          placeholder={'When do I need to do it again'}
+          containerStyle={globalStyle.inputContainerWithDate}
+          inputContainerStyle={{
+              borderBottomWidth: 0
+          }}
+          inputStyle={globalStyle.inputText}
+          value={this.state.futureTime}
+          onChangeText={(text)=> {this.setState({futureTime: text}); Keyboard.dismiss()}} 
+          onPress={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
+          onFocus={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
+            onSubmitEditing={Keyboard.dismiss}
+        />
+        <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(2)}>
+            <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
+        </TouchableOpacity>
+      </View>
+    )
   }
 
   renderInputFields(){
@@ -306,6 +321,8 @@ class AddNewReminder extends PureComponent {
         {this.renderPastInput()}
         <Text style={globalStyle.inputFieldTitle}>When should I do it again?</Text>
         {this.renderFutureInput()}
+        <Text style={globalStyle.inputFieldTitle}>Is it a repeating task?</Text>
+        {this.renderPicker()}
       </View>
     )
   }
