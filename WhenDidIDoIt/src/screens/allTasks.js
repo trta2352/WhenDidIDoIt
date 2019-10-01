@@ -231,8 +231,7 @@ class AllTasks extends Component {
           </View>
         </View>
         {this.renderCorrectView()}
-        <View style = {styles.infoBtnStyle}>
-          {this.renderAddNewReminderBtn()}
+        <View style = {styles.infoBtnStyle}>    
           {this.renderAreYouSureAlert()}
           {this.renderInfoAlert()}
         </View>

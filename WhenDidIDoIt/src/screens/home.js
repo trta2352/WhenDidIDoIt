@@ -21,6 +21,8 @@ import colors from '../styles/colors.js';
 import ImagePicker from 'react-native-image-picker';
 import images from '../assets/images.js';
 import RNPickerSelect from 'react-native-picker-select';
+import InfoAlert from '../components/alert/infoAlert.js';
+import SupportFun from '../utils/supportFunction.js';
 
 class Home extends Component {
   constructor(props) {
@@ -38,7 +40,8 @@ class Home extends Component {
       choiceId: 0, 
       path: null,
       shouldStartTheIndicator: false, 
-      selectedPickerValue: null
+      selectedPickerValue: null, 
+      isInfoAlertVisible: false
     }
   }
 
@@ -72,11 +75,19 @@ class Home extends Component {
   _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
 
   _handleDatePicked = (date) => {
-    if(this.state.currentVisible==1){
-        this.setState({pastTime: date.toDateString(), currentVisible: 0})
+    if(this.state.currentVisible == 1){
+      this.setState({pastTime: SupportFun.formatDate(date), currentVisible: 0})
     }
     else {
-        this.setState({futureTime: date.toDateString(), currentVisible: 0})
+      if(SupportFun.checkIfSelectedDatePassed(date)){
+        console.log("to je tst")
+        this.setState({futureTime: 'WRONG DATE', isInfoAlertVisible: true, currentVisible: 0})
+
+      }
+      else{
+        this.setState({futureTime: SupportFun.formatDate(date), currentVisible: 0})
+      }
+
     }
     this._hideDateTimePicker();
   };
@@ -95,6 +106,18 @@ class Home extends Component {
     );
   }
 
+  renderInfoAlert = () =>{
+    return (
+      <InfoAlert 
+        isVisible={this.state.isInfoAlertVisible}
+        callback ={()=> this.setState({isInfoAlertVisible: !this.state.isInfoAlertVisible})}
+        titleText={'SUCCESS'}
+        subtitleText ={"You have successfully saved a new reminder."}
+        />
+    );
+  }
+
+  //TODO check if all the data has been added
   saveBtnPressed() {
     (async () => {
       const reminder = {
@@ -108,29 +131,15 @@ class Home extends Component {
 
       let temp = await DBManager.save(reminder)
       if (temp) {
-        this.props.navigation.goBack();
+        console.log("sem tukaj noter")
+       this.setState({
+         isInfoAlertVisible: true
+       })
       } else {
         console.log("Shranjevanje ni uspelo");
       }
     })();
   }
-
-  renderAddPhotoBtn = () => {
-    return (
-      /*<AddBtn 
-        text = "ADD PHOTO"
-        onPress = {()=> {this.setState({shouldStartTheIndicator: true}); this.showImagePicker()}}
-        width = {140}
-        height = {40}
-        textSize = {13}
-        backgroundColor = {colors.addBtnBackground}
-        textColor = {colors.addBtnText}
-      />*/
-      <TouchableOpacity onPress = {() => {this.setState({shouldStartTheIndicator: true}); this.showImagePicker()}}>
-        <Image source = {images.camera} style = {{height: 50, width: 50}}/>
-      </TouchableOpacity>
-      );
-  } 
 
   showImagePicker = () => {
     const options = {
@@ -167,42 +176,30 @@ class Home extends Component {
 
   renderSelectedImage = () =>{
     if(this.state.path != null){
-      this.setState({shouldStartTheIndicator: false})
+      if(this.state.shouldStartTheIndicator != false){
+        this.setState({shouldStartTheIndicator: false})
+      }
       return(
-        <TouchableOpacity style = {{ backgroundColor: 'black', borderRadius: 4, marginTop: 5, marginBottom: 5}} onPress = {() => {this.showImagePicker(); this.setState({shouldStartTheIndicator: true, path: null})}}>
-           <Image source={{ uri: this.state.path }} style={{width: 170, height: 227}}/>
+        <TouchableOpacity style = {{ backgroundColor: 'black', borderRadius: 4, marginTop: 5, marginBottom: 5, marginLeft: 30, borderRadius: 5}} onPress = {() => {this.showImagePicker(); this.setState({shouldStartTheIndicator: true, path: null})}}>
+           <Image source={{ uri: this.state.path }} style={{width: 80, height: 106}}/>
         </TouchableOpacity>
       );
     }
     else if(this.state.shouldStartTheIndicator){
       return(
-        <ActivityIndicator size="large" color="#064c5d" />
+        <ActivityIndicator size="large" color="#064c5d" style = {{marginLeft: 30}}/>
       );
     }
-  }
-
-  renderSaveBtn = () => {
-    return (
-      <AddBtn 
-        text = "SAVE"
-        onPress = {()=> {this.saveBtnPressed()}}
-        width = {130}
-        height = {40}
-        textSize = {14}
-        backgroundColor = {colors.addBtnBackground}
-        textColor = {colors.addBtnText}
-      />
-    );
   }
 
   renderDateTimePicker(id){
     return (
       <DateTimePicker
-        isVisible={this.state.isDateTimePickerVisible}
-        onConfirm={(date)=>this._handleDatePicked(date, id)}
-        onCancel={this._hideDateTimePicker}
-        is24Hour={true}
-        mode={'datetime'}
+        isVisible = {this.state.isDateTimePickerVisible}
+        onConfirm = {(date)=>this._handleDatePicked(date, id)}
+        onCancel = {this._hideDateTimePicker}
+        is24Hour = {true}
+        mode = {'datetime'}
       />
     );
   }
@@ -210,9 +207,9 @@ class Home extends Component {
   renderPicker = () =>{
     return(
       <RNPickerSelect
-      onValueChange={(value) => this.setState({selectedPickerValue: value})}
-      style={pickerSelectStyles}
-      items={[
+      onValueChange = {(value) => this.setState({selectedPickerValue: value})}
+      style = {pickerSelectStyles}
+      items = {[
           { label: 'daily', value: '1' },
           { label: 'weekly', value: '2' },
           { label: 'monthly', value: '3' },
@@ -222,21 +219,21 @@ class Home extends Component {
 
   renderPastInput(){
     return (
-      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
+      <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
         <Input 
-          placeholder={'Cleaned room'}
-          containerStyle={globalStyle.inputContainerWithDate}
-          inputContainerStyle={{
+          placeholder = {'Cleaned room'}
+          containerStyle = {globalStyle.inputContainerWithDate}
+          inputContainerStyle = {{
               borderBottomWidth: 0, 
           }}
-          inputStyle={globalStyle.inputText}
-          value={this.state.pastTime}
-          onChangeText={(text)=> {this.setState({pastTime: text}); Keyboard.dismiss()}} 
-          onFocus={()=>{this._showDateTimePicker(1); Keyboard.dismiss()}}
-          onSubmitEditing={Keyboard.dismiss}
+          inputStyle = {globalStyle.inputText}
+          value = {this.state.pastTime}
+          onChangeText = {(text)=> {this.setState({pastTime: text}); Keyboard.dismiss()}} 
+          onFocus = {()=>{this._showDateTimePicker(1); Keyboard.dismiss()}}
+          onSubmitEditing = {Keyboard.dismiss}
         />
-        <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(1)}>
-            <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
+        <TouchableOpacity style = {{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(1)}>
+            <Image source = {images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
         </TouchableOpacity>
       </View>
     );
@@ -244,22 +241,22 @@ class Home extends Component {
 
   renderFutureInput(){
     return (
-      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
+      <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
         <Input 
-          placeholder={'When do I need to do it again'}
-          containerStyle={globalStyle.inputContainerWithDate}
-          inputContainerStyle={{
+          placeholder = {'When do I need to do it again'}
+          containerStyle = {globalStyle.inputContainerWithDate}
+          inputContainerStyle = {{
               borderBottomWidth: 0
           }}
-          inputStyle={globalStyle.inputText}
-          value={this.state.futureTime}
-          onChangeText={(text)=> {this.setState({futureTime: text}); Keyboard.dismiss()}} 
-          onPress={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
-          onFocus={()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
-            onSubmitEditing={Keyboard.dismiss}
+          inputStyle = {globalStyle.inputText}
+          value = {this.state.futureTime}
+          onChangeText = {(text)=> {this.setState({futureTime: text}); Keyboard.dismiss()}} 
+          onPress = {()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
+          onFocus = {()=>{this._showDateTimePicker(2); Keyboard.dismiss()}}
+            onSubmitEditing = {Keyboard.dismiss}
         />
-        <TouchableOpacity style={{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress={()=> this._showDateTimePicker(2)}>
-            <Image source={images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
+        <TouchableOpacity style = {{ alignItems: 'center', alignContent: 'center', justifyContent: 'center'}} onPress = {()=> this._showDateTimePicker(2)}>
+          <Image source = {images.calendar} style={{width: 35, height: 35, paddingTop:3}}/>
         </TouchableOpacity>
       </View>
     )
@@ -267,34 +264,34 @@ class Home extends Component {
 
   renderInputFields(){
     return(
-      <View style={{paddingTop:-100}}>
-        <Text style={globalStyle.inputFieldTitle}>Task title</Text>
+      <View style = {{paddingTop:-100}}>
+        <Text style = {globalStyle.inputFieldTitle}>Task title</Text>
         <Input 
-          placeholder={'Cleaned room'}
-          containerStyle={globalStyle.inputContainer}
-          inputContainerStyle={{
+          placeholder = {'Cleaned room'}
+          containerStyle = {globalStyle.inputContainer}
+          inputContainerStyle = {{
             borderBottomWidth: 0
           }}
-          inputStyle={globalStyle.inputText}
-          value={this.state.title}
-          onChangeText={(text)=> this.setState({title: text})} 
+          inputStyle = {globalStyle.inputText}
+          value = {this.state.title}
+          onChangeText = {(text)=> this.setState({title: text})} 
         />
-        <Text style={globalStyle.inputFieldTitle}>Description</Text>
+        <Text style = {globalStyle.inputFieldTitle}>Description</Text>
         <Input 
-          placeholder={'Big room clean up'}
-          containerStyle={globalStyle.inputContainer}
-          inputContainerStyle={{
+          placeholder = {'Big room clean up'}
+          containerStyle = {globalStyle.inputContainer}
+          inputContainerStyle = {{
             borderBottomWidth: 0
           }}
-          inputStyle={globalStyle.inputText}
-          value={this.state.description}
-          onChangeText={(text)=> this.setState({description: text})} 
+          inputStyle = {globalStyle.inputText}
+          value = {this.state.description}
+          onChangeText = {(text)=> this.setState({description: text})} 
         />
-        <Text style={globalStyle.inputFieldTitle}>When did I do it?</Text>
+        <Text style = {globalStyle.inputFieldTitle}>When did I do it?</Text>
         {this.renderPastInput()}
-        <Text style={globalStyle.inputFieldTitle}>When should I do it again?</Text>
+        <Text style = {globalStyle.inputFieldTitle}>When should I do it again?</Text>
         {this.renderFutureInput()}
-        <Text style={globalStyle.inputFieldTitle}>Is it a repeating task?</Text>
+        <Text style = {globalStyle.inputFieldTitle}>Is it a repeating task?</Text>
         {this.renderPicker()}
       </View>
     )
@@ -302,9 +299,11 @@ class Home extends Component {
 
   renderImageViewAndBtn = () =>{
     return(
-      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40}}>
+      <View style = {{alignItems: 'center', justifyContent: 'center', marginTop: 20, flexDirection: 'row'}}>
+        <TouchableOpacity onPress = {() => {this.setState({shouldStartTheIndicator: true}); this.showImagePicker()}}>
+          <Image source = {images.camera} style = {{height: 50, width: 50}}/>
+        </TouchableOpacity>
         {this.renderSelectedImage()}
-        {this.renderAddPhotoBtn()}
       </View>
     );
   }
@@ -312,30 +311,39 @@ class Home extends Component {
 
   renderSaveBtnView(){
     return(
-      <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 40, paddingBottom: 300}}>
-        {this.renderSaveBtn()}
+      <View style = {{alignItems: 'center', justifyContent: 'center', marginTop: 25, paddingBottom: 130}}>
+        <AddBtn 
+          text = "SAVE"
+          onPress = {()=> {this.saveBtnPressed()}}
+          width = {130}
+          height = {40}
+          textSize = {14}
+          backgroundColor = {colors.addBtnBackground}
+          textColor = {colors.addBtnText}
+        />
       </View>
     );
   }
 
   render() {
     return (
-      <View style={globalStyle.container}>
-       <View style={styles.topContainer}>
-          <View style={styles.leftTopContainer}>
-            <Text style={globalStyle.mainTitleStyle}>When Did I Do It?</Text>
+      <View style = {globalStyle.container}>
+       <View style= {styles.topContainer}>
+          <View style = {styles.leftTopContainer}>
+            <Text style = {globalStyle.mainTitleStyle}>When Did I Do It?</Text>
           </View>
-          <View style={styles.rightTopContainer}>
+          <View style = {styles.rightTopContainer}>
             <Text style = {globalStyle.screeTitleStyle}>New reminder</Text>
           </View>
         </View>
-      <ScrollView style={{flex: 0.7}}>
+      <View style = {{flex: 0.7}}>
        {this.renderInputFields()}
        {this.renderImageViewAndBtn()}
        {this.renderSaveBtnView()}
        {this.renderDateTimePicker()}
        {this.renderAreYouSureAlert()}
-      </ScrollView>
+       {this.renderInfoAlert()}
+      </View>
     </View>
     )
   }
