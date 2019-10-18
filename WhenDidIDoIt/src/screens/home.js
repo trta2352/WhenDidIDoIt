@@ -9,7 +9,7 @@ import {
   ScrollView, 
   ActivityIndicator
 } from 'react-native'
-import {  Input } from 'react-native-elements';
+import {  Input, CheckBox } from 'react-native-elements';
 import Image from 'react-native-remote-svg';
 
 import AddBtn from '../components/buttons/addBtn.js';
@@ -23,6 +23,12 @@ import images from '../assets/images.js';
 import RNPickerSelect from 'react-native-picker-select';
 import InfoAlert from '../components/alert/infoAlert.js';
 import SupportFun from '../utils/supportFunction.js';
+
+const placeholder = {
+  label: 'Select repeat interval',
+  value: null,
+  color: '#aeb1b3',
+};
 
 class Home extends Component {
   constructor(props) {
@@ -207,12 +213,13 @@ class Home extends Component {
   renderPicker = () =>{
     return(
       <RNPickerSelect
-      onValueChange = {(value) => this.setState({selectedPickerValue: value})}
-      style = {pickerSelectStyles}
-      items = {[
-          { label: 'daily', value: '1' },
-          { label: 'weekly', value: '2' },
-          { label: 'monthly', value: '3' },
+        onValueChange = {(value) => this.setState({selectedPickerValue: value})}
+        style = {pickerSelectStyles}
+        placeholder = {placeholder}
+        items = {[
+            { label: 'daily', value: '1' },
+            { label: 'weekly', value: '2' },
+            { label: 'monthly', value: '3' },
       ]}></RNPickerSelect>  
     );
   }
@@ -222,6 +229,7 @@ class Home extends Component {
       <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
         <Input 
           placeholder = {'Cleaned room'}
+          placeholderTextColor = {'#aeb1b3'}
           containerStyle = {globalStyle.inputContainerWithDate}
           inputContainerStyle = {{
               borderBottomWidth: 0, 
@@ -244,9 +252,10 @@ class Home extends Component {
       <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', alignContent: 'center'}}>
         <Input 
           placeholder = {'When do I need to do it again'}
+          placeholderTextColor = {'#aeb1b3'}
           containerStyle = {globalStyle.inputContainerWithDate}
           inputContainerStyle = {{
-              borderBottomWidth: 0
+              borderBottomWidth: 0, 
           }}
           inputStyle = {globalStyle.inputText}
           value = {this.state.futureTime}
@@ -262,12 +271,42 @@ class Home extends Component {
     )
   }
 
+  renderCheckBox = () =>{
+    return (
+      <CheckBox 
+      title={<Text style = {styles.checkBoxTitlte}>Remind me!</Text>}
+      checked = {this.state.checkedNews}
+      containerStyle = {{
+        backgroundColor: 'transparent', 
+        borderColor: 'transparent'}}
+        checkedIcon={this.getCheckedCheckBoxView()}
+        uncheckedIcon={this.getUncheckedCheckBoxView()}
+        onPress = {() => this.setState({ checkedNews: !this.state.checkedNews })}
+      />
+    );
+  }
+
+  getCheckedCheckBoxView = () =>{
+    return (
+      <View style={{width: 26, height: 26, backgroundColor: '#0a1d30', borderRadius: 2, marginLeft: -6,  justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={{color: 'white', fontSize: 20, padding: 0, ...Platform.select({ android:{fontFamily: 'CooperHewitt-Bold'}})}}>✓</Text>
+      </View>
+    );
+  }
+
+  getUncheckedCheckBoxView = () =>{
+    return (
+      <View style={{width: 26, height: 26, backgroundColor: 'white', borderRadius: 2, borderWidth: 1, borderColor: '#b4bdc7', marginLeft: -6}} />
+    );
+  }
+
   renderInputFields(){
     return(
       <View style = {{paddingTop:-100}}>
         <Text style = {globalStyle.inputFieldTitle}>Task title</Text>
         <Input 
           placeholder = {'Cleaned room'}
+          placeholderTextColor = {'#aeb1b3'}
           containerStyle = {globalStyle.inputContainer}
           inputContainerStyle = {{
             borderBottomWidth: 0
@@ -279,6 +318,7 @@ class Home extends Component {
         <Text style = {globalStyle.inputFieldTitle}>Description</Text>
         <Input 
           placeholder = {'Big room clean up'}
+          placeholderTextColor = {'#aeb1b3'}
           containerStyle = {globalStyle.inputContainer}
           inputContainerStyle = {{
             borderBottomWidth: 0
@@ -293,6 +333,7 @@ class Home extends Component {
         {this.renderFutureInput()}
         <Text style = {globalStyle.inputFieldTitle}>Is it a repeating task?</Text>
         {this.renderPicker()}
+        {this.renderCheckBox()}
       </View>
     )
   }
@@ -389,6 +430,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: 20,
   },
+  checkBoxTitlte: {
+    fontFamily: 'CooperHewitt-Semibold', 
+    fontSize: 15,
+    color: '#7f7f7f',
+    paddingTop: 9,
+    paddingLeft: 14
+  }, 
 })
 
 const pickerSelectStyles = StyleSheet.create({

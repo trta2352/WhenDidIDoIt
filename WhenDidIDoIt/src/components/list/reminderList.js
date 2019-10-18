@@ -81,7 +81,7 @@ class ReminderList extends Component {
             {item.title}
           </Text>
           <Text style={globalStyle.subtitle}>
-            <Text>DO IT AGAIN: </Text>{item.whenDidIDoIt}
+            <Text>DO IT AGAIN: </Text>{item.whenShouldIDoItAgain}
           </Text>
         </View>
 

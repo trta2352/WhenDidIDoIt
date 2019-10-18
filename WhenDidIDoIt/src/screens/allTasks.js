@@ -18,6 +18,7 @@ import InfoAlert from '../components/alert/infoAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
 import images from '../assets/images.js';
+import SupportFun from '../utils/supportFunction.js'
 
 class AllTasks extends Component {
   constructor(props) {
@@ -34,6 +35,9 @@ class AllTasks extends Component {
         }, 
       ], 
       realData: [], 
+      todayTasks: [], 
+      thisWeekTasks: [], 
+      laterTasks: [], 
       areYousureAlertVisible: false, 
       missingInputVisible: false, 
       choiceId: 0, 
@@ -52,9 +56,21 @@ class AllTasks extends Component {
     );
   }
 
+  sortData = (tasks) =>{
+    console.log("sem v sortData")
+    let sortedTasks = SupportFun.getSortedTasks(tasks);
+    console.log(sortedTasks);
+    this.setState({
+      todayTasks: sortedTasks.todays, 
+      thisWeekTasks: sortedTasks.thisWeek, 
+      laterTasks: sortedTasks.later, 
+    })
+  }
+
   updatedData(isUpdate){
     (async () => {
       let temp = await DBManager.getAll()
+      this.sortData(temp)
       if(temp != false){
         this.setState({realData: temp})
       }
@@ -131,9 +147,9 @@ class AllTasks extends Component {
   renderTodoSection = () =>{
     return (
       <View>
-        <Text style = {globalStyle.aboveListTitle}>DO NOW </Text>
+        <Text style = {globalStyle.aboveListTitle}>TODAY </Text>
         <ScrollView>
-            <Reminderlist data = {this.state.realData} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
+            <Reminderlist data = {this.state.todayTasks} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
           </ScrollView>
       </View>
     );
@@ -142,9 +158,9 @@ class AllTasks extends Component {
   renderNextWeekSection = () =>{
     return (
       <View>
-        <Text style = {globalStyle.aboveListTitle}>DO NEXT WEEK </Text>
+        <Text style = {globalStyle.aboveListTitle}>THIS WEEK </Text>
         <ScrollView>
-            <Reminderlist data = {this.state.realData} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
+            <Reminderlist data = {this.state.thisWeekTasks} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
           </ScrollView>
       </View>
     );
@@ -153,9 +169,9 @@ class AllTasks extends Component {
   renderOtherSection = () =>{
     return (
       <View>
-        <Text style = {globalStyle.aboveListTitle}>DO SOMETIME LATER</Text>
+        <Text style = {globalStyle.aboveListTitle}>LATER</Text>
         <ScrollView>
-            <Reminderlist data = {this.state.realData} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
+            <Reminderlist data = {this.state.laterTasks} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
           </ScrollView>
       </View>
     );
