@@ -43,11 +43,13 @@ class Home extends Component {
       futureTime: '', 
       currentVisible: 0, 
       areYousureAlertVisible: false, 
-      choiceId: 0, 
       path: null,
       shouldStartTheIndicator: false, 
       selectedPickerValue: null, 
-      isInfoAlertVisible: false
+      isInfoAlertVisible: false, 
+      nofitificationStatus: false, 
+      infoAlertTitle: null, 
+      infoAlertSubtitle: null
     }
   }
 
@@ -86,14 +88,24 @@ class Home extends Component {
     }
     else {
       if(SupportFun.checkIfSelectedDatePassed(date)){
-        console.log("to je tst")
-        this.setState({futureTime: 'WRONG DATE', isInfoAlertVisible: true, currentVisible: 0})
-
+        try {
+          this.setState({
+            futureTime: 'WRONG DATE',
+            currentVisible: 0,
+          })
+        } catch (e) { 
+          console.log(e)
+        }
+       
       }
       else{
-        this.setState({futureTime: SupportFun.formatDate(date), currentVisible: 0})
+        try {
+          this.setState({futureTime: SupportFun.formatDate(date), currentVisible: 0})
+        } catch (e) {
+          console.log(e)
+        }
+        
       }
-
     }
     this._hideDateTimePicker();
   };
@@ -104,8 +116,8 @@ class Home extends Component {
         isVisible={this.state.areYousureAlertVisible}
         callback ={()=> this.setState({areYousureAlertVisible: !this.state.areYousureAlertVisible})}
         choiceBtn = {(choice)=> { this.handleBackButton(choice)}}
-        titleText={'GO BACK'}
-        subtitleText ={"Are you sure you want to go back? Unsaved changes will be lost."}
+        titleText = {'GO BACK'}
+        subtitleText = {"Are you sure you want to go back? Unsaved changes will be lost."}
         leftBtnTitle = {'Cancel'}
         rightBtnTitle = {'Go back'}
         />
@@ -115,36 +127,49 @@ class Home extends Component {
   renderInfoAlert = () =>{
     return (
       <InfoAlert 
-        isVisible={this.state.isInfoAlertVisible}
-        callback ={()=> this.setState({isInfoAlertVisible: !this.state.isInfoAlertVisible})}
-        titleText={'SUCCESS'}
-        subtitleText ={"You have successfully saved a new reminder."}
+        isVisible = {this.state.isInfoAlertVisible}
+        callback = {()=> this.setState({isInfoAlertVisible: !this.state.isInfoAlertVisible})}
+        titleText = {this.state.infoAlertTitle}
+        subtitleText = {this.state.infoAlertSubtitle}
         />
     );
   }
 
   //TODO check if all the data has been added
   saveBtnPressed() {
-    (async () => {
-      const reminder = {
-        id: this.state.id,
-        'title': this.state.title,
-        'description': this.state.description,
-        'whenDidIDoIt': this.state.pastTime,
-        'whenShouldIDoItAgain': this.state.futureTime,
-        'imagePath': this.state.path
-      }
+    if (this.state.title != '' && this.state.pastTime != '' && this.state.futureTime != '' && this.state.futureTime != 'WRONG DATE' && this.state.selectedPickerValue != 0) {
+      (async () => {
+        const reminder = {
+          id: this.state.id,
+          'title': this.state.title,
+          'description': this.state.description,
+          'whenDidIDoIt': this.state.pastTime,
+          'whenShouldIDoItAgain': this.state.futureTime,
+          'imagePath': this.state.path,
+          'nofitificationStatus': this.state.nofitificationStatus, 
+          'selectedPickerValue': this.state.selectedPickerValue
+        }
 
-      let temp = await DBManager.save(reminder)
-      if (temp) {
-        console.log("sem tukaj noter")
-       this.setState({
-         isInfoAlertVisible: true
-       })
-      } else {
-        console.log("Shranjevanje ni uspelo");
-      }
-    })();
+        let temp = await DBManager.save(reminder)
+        if (temp) {
+          console.log("sem tukaj noter")
+          this.setState({
+            isInfoAlertVisible : true, 
+            infoAlertTitle: 'SUCCESS', 
+            infoAlertSubtitle: 'New reminder was successfully saved.'
+          })
+        } else {
+          console.log("Some error accured");
+        }
+      })();
+    }
+    else {
+      this.setState({
+        isInfoAlertVisible: true, 
+        infoAlertTitle: 'FAILURE', 
+        infoAlertSubtitle: 'Missing data. Pleas check if all inputs have data. '
+      })
+    }
   }
 
   showImagePicker = () => {
@@ -187,7 +212,7 @@ class Home extends Component {
       }
       return(
         <TouchableOpacity style = {{ backgroundColor: 'black', borderRadius: 4, marginTop: 5, marginBottom: 5, marginLeft: 30, borderRadius: 5}} onPress = {() => {this.showImagePicker(); this.setState({shouldStartTheIndicator: true, path: null})}}>
-           <Image source={{ uri: this.state.path }} style={{width: 80, height: 106}}/>
+           <Image source={{ uri: this.state.path }} style={{width: 91, height: 120}}/>
         </TouchableOpacity>
       );
     }
@@ -217,9 +242,10 @@ class Home extends Component {
         style = {pickerSelectStyles}
         placeholder = {placeholder}
         items = {[
-            { label: 'daily', value: '1' },
-            { label: 'weekly', value: '2' },
-            { label: 'monthly', value: '3' },
+            { label: 'never', value: '1' },
+            { label: 'daily', value: '2' },
+            { label: 'weekly', value: '3' },
+            { label: 'monthly', value: '4' },
       ]}></RNPickerSelect>  
     );
   }
@@ -275,13 +301,13 @@ class Home extends Component {
     return (
       <CheckBox 
       title={<Text style = {styles.checkBoxTitlte}>Remind me!</Text>}
-      checked = {this.state.checkedNews}
+      checked = {this.state.nofitificationStatus}
       containerStyle = {{
         backgroundColor: 'transparent', 
         borderColor: 'transparent'}}
         checkedIcon={this.getCheckedCheckBoxView()}
         uncheckedIcon={this.getUncheckedCheckBoxView()}
-        onPress = {() => this.setState({ checkedNews: !this.state.checkedNews })}
+        onPress = {() => this.setState({ nofitificationStatus: !this.state.nofitificationStatus })}
       />
     );
   }
@@ -340,7 +366,7 @@ class Home extends Component {
 
   renderImageViewAndBtn = () =>{
     return(
-      <View style = {{alignItems: 'center', justifyContent: 'center', marginTop: 20, flexDirection: 'row'}}>
+      <View style = {{alignItems: 'center', justifyContent: 'center', marginTop: 15, flexDirection: 'row'}}>
         <TouchableOpacity onPress = {() => {this.setState({shouldStartTheIndicator: true}); this.showImagePicker()}}>
           <Image source = {images.camera} style = {{height: 50, width: 50}}/>
         </TouchableOpacity>
@@ -352,7 +378,7 @@ class Home extends Component {
 
   renderSaveBtnView(){
     return(
-      <View style = {{alignItems: 'center', justifyContent: 'center', marginTop: 25, paddingBottom: 130}}>
+      <View style = {{alignItems: 'center', justifyContent: 'center', marginTop: 4, paddingBottom: 130}}>
         <AddBtn 
           text = "SAVE"
           onPress = {()=> {this.saveBtnPressed()}}
@@ -377,14 +403,14 @@ class Home extends Component {
             <Text style = {globalStyle.screeTitleStyle}>New reminder</Text>
           </View>
         </View>
-      <View style = {{flex: 0.7}}>
+      <ScrollView style = {{flex: 0.7}}>
        {this.renderInputFields()}
        {this.renderImageViewAndBtn()}
        {this.renderSaveBtnView()}
        {this.renderDateTimePicker()}
        {this.renderAreYouSureAlert()}
        {this.renderInfoAlert()}
-      </View>
+      </ScrollView>
     </View>
     )
   }
@@ -415,21 +441,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', 
     paddingRight: 20
   }, 
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  capture: {
-    marginTop: 40,
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
-  },
   checkBoxTitlte: {
     fontFamily: 'CooperHewitt-Semibold', 
     fontSize: 15,

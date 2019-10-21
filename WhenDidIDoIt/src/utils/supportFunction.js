@@ -2,15 +2,17 @@ import {Dimensions} from 'react-native'
 
 const SupportFun = {
     checkIfSelectedDatePassed: function(selectedDate){
-       let currentDate = new Date();
-
-       if(Date.parse(selectedDate) > currentDate){
-           return false
-       }
-       else{
-           return true
-       }
-
+        try {
+            let currentDate = new Date();
+            if(Date.parse(selectedDate) > currentDate){
+                return false
+            }
+            else{
+                return true
+            }
+        } catch (e) {
+            console.log(e)
+        }
     },
     formatDate: function(date){
         let formatedDate = date.toDateString();
@@ -75,8 +77,13 @@ const SupportFun = {
 
        return lastday
     }, 
-   
-
+    scheduleNotification: function(){
+        PushNotification.localNotificationSchedule({
+            //... You can use all the options from localNotifications
+            message: "My Notification Message", // (required)
+            date: new Date(Date.now() + 60 * 1000) // in 60 secs
+          });
+    }
 }
 
 export default SupportFun;

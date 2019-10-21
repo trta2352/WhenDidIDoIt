@@ -190,7 +190,7 @@ class AllTasks extends Component {
     else {
       if(this.state.isLoadingIndicatorVisible == true){
         return (
-          <ActivityIndicator size = "large" color = "#0000ff" hidesWhenStopped = {this.state.isLoadingIndicatorVisible}/>
+          <ActivityIndicator size = "large" color = {'#064c5d'} hidesWhenStopped = {this.state.isLoadingIndicatorVisible}/>
         );
       }
       else {
