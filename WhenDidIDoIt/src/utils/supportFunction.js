@@ -1,5 +1,7 @@
 import {Dimensions} from 'react-native'
 
+import {NotificationsIOS} from 'react-native-notifications'
+
 const SupportFun = {
     checkIfSelectedDatePassed: function(selectedDate){
         try {
@@ -78,11 +80,15 @@ const SupportFun = {
        return lastday
     }, 
     scheduleNotification: function(){
-        PushNotification.localNotificationSchedule({
-            //... You can use all the options from localNotifications
-            message: "My Notification Message", // (required)
-            date: new Date(Date.now() + 60 * 1000) // in 60 secs
-          });
+        console.log(NotificationsIOS)
+        let localNotification = NotificationsIOS.localNotification({
+            body: "Local notificiation!",
+            title: "Local Notification Title",
+            sound: "chime.aiff",
+            silent: false,
+            category: "SOME_CATEGORY",
+            userInfo: { }
+        });
     }
 }
 

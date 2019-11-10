@@ -76,6 +76,8 @@ class Home extends Component {
         }
       })();
     }
+
+    SupportFun.scheduleNotification();
   }
 
   _showDateTimePicker = (pickerId) => this.setState({ isDateTimePickerVisible: true, currentVisible: pickerId });
