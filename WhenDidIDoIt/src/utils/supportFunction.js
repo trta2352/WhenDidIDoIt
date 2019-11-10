@@ -80,15 +80,15 @@ const SupportFun = {
        return lastday
     }, 
     scheduleNotification: function(){
-        console.log(NotificationsIOS)
-        let localNotification = NotificationsIOS.localNotification({
+        //console.log(NotificationsIOS)
+      /*  let localNotification = NotificationsIOS.localNotification({
             body: "Local notificiation!",
             title: "Local Notification Title",
             sound: "chime.aiff",
             silent: false,
             category: "SOME_CATEGORY",
             userInfo: { }
-        });
+        });*/
     }
 }
 
