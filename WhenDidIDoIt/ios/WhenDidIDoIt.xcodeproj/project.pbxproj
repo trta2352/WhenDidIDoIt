@@ -27,6 +27,7 @@
 		57739A6AAEDC5F6748779F01 /* libPods-WhenDidIDoItTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7213C3AE9F8DFF840FCBB86 /* libPods-WhenDidIDoItTests.a */; };
 		781FD63822FF34DC00366259 /* libreact-native-cameraroll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 781FD63722FF34DC00366259 /* libreact-native-cameraroll.a */; };
 		781FD63A22FF34E300366259 /* libreact-native-camera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 781FD63922FF34E300366259 /* libreact-native-camera.a */; };
+		7822CFAE2378036300AE9A04 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7822CFAD2378036300AE9A04 /* AppCenter-Config.plist */; };
 		786AD7FD53654AAAB006350A /* CooperHewitt-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95BE3D16936A4800A9E687B2 /* CooperHewitt-Bold.ttf */; };
 		829AD6DDD869421D85460EDB /* CooperHewitt-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F55F4047A2B840058EBC9EA8 /* CooperHewitt-Light.ttf */; };
 		8641EAB2781542F2AEC6A076 /* CooperHewitt-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3CDA0548649248DFB4A92BB7 /* CooperHewitt-Book.ttf */; };
@@ -82,6 +83,7 @@
 		75EAA9566BBE4598A2E7ED74 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		781FD63722FF34DC00366259 /* libreact-native-cameraroll.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-cameraroll.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		781FD63922FF34E300366259 /* libreact-native-camera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-camera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7822CFAD2378036300AE9A04 /* AppCenter-Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		78D4E28851239A2AF2E55727 /* Pods-WhenDidIDoItTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhenDidIDoItTests.release.xcconfig"; path = "Target Support Files/Pods-WhenDidIDoItTests/Pods-WhenDidIDoItTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D4CCD3E1FF38FC81308E8C8 /* Pods-WhenDidIDoIt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhenDidIDoIt.debug.xcconfig"; path = "Target Support Files/Pods-WhenDidIDoIt/Pods-WhenDidIDoIt.debug.xcconfig"; sourceTree = "<group>"; };
 		839378A014B1409F94EBC6A5 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				7822CFAD2378036300AE9A04 /* AppCenter-Config.plist */,
 			);
 			name = WhenDidIDoIt;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				4B63B9AA89FB4217A43EE029 /* CooperHewitt-Medium.ttf in Resources */,
 				3B0EF616FBE447708796D7FB /* CooperHewitt-MediumItalic.ttf in Resources */,
 				265E59DFCFFE479FAFB48ADB /* CooperHewitt-Semibold.ttf in Resources */,
+				7822CFAE2378036300AE9A04 /* AppCenter-Config.plist in Resources */,
 				4F311B7849EF4E88A92DBC66 /* CooperHewitt-SemiboldItalic.ttf in Resources */,
 				CD87929D11554CA2A1EC04A1 /* CooperHewitt-Thin.ttf in Resources */,
 				201646B93F1649B68E23A9C7 /* CooperHewitt-ThinItalic.ttf in Resources */,
@@ -741,6 +745,7 @@
 			baseConfigurationReference = 2FE637D39A144B32851F7FAE /* Pods-WhenDidIDoItTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				DEVELOPMENT_TEAM = 2G3WFE7R7N;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -765,6 +770,7 @@
 			baseConfigurationReference = 78D4E28851239A2AF2E55727 /* Pods-WhenDidIDoItTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 2G3WFE7R7N;
 				INFOPLIST_FILE = WhenDidIDoItTests/Info.plist;
