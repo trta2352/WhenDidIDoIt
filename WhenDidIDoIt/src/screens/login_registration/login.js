@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity
 } from 'react-native'
+
 import globalStyle from '../../styles/globalStyle';
 import {  Input } from 'react-native-elements';
 import AddBtn from '../../components/buttons/addBtn.js'
@@ -44,6 +45,7 @@ class Login extends Component {
           }}
           inputStyle = {globalStyle.inputText}
           value = {this.state.password}
+          secureTextEntry = {true}
           onChangeText = {(text)=> this.setState({password: text})} 
         />
         <View style = {{paddingTop: 20}}/>

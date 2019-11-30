@@ -10,19 +10,30 @@ import globalStyle from '../../styles/globalStyle';
 import {  Input } from 'react-native-elements';
 import AddBtn from '../../components/buttons/addBtn.js'
 import colors from '../../styles/colors';
-import Validation from '../../utils/validation/login_registration'
+import validator from '../../utils/validation/login_registration/validateWrapper.js'
 
 class Registration extends Component {
   constructor(props) {
     super(props);
 
-    this.state={
+    this.state = {
       email: '', 
-      passowrd: '', 
-      repeatPassword: ''
+      password: '', 
+      repeatPassword: '', 
+      emailError: false, 
+      passwordError: false, 
+      repeatPasswordError: false
     }
   }
 
+  getCorrectContainerStyle = (isError) => {
+    if(isError){
+      return globalStyle.inputContainerError
+    }
+    else {
+      return globalStyle.inputContainer
+    }
+  }
 
   renderRegistrationFields = () =>{
     return(
@@ -31,7 +42,7 @@ class Registration extends Component {
         <Input 
           placeholder = {'email'}
           placeholderTextColor = {'#aeb1b3'}
-          containerStyle = {globalStyle.inputContainer}
+          containerStyle = {this.getCorrectContainerStyle(this.state.emailError)}
           inputContainerStyle = {{
             borderBottomWidth: 0
           }}
@@ -42,23 +53,25 @@ class Registration extends Component {
         <Input 
           placeholder = {'password'}
           placeholderTextColor = {'#aeb1b3'}
-          containerStyle = {globalStyle.inputContainer}
+          containerStyle = {this.getCorrectContainerStyle(this.state.passwordError)}
           inputContainerStyle = {{
             borderBottomWidth: 0
           }}
           inputStyle = {globalStyle.inputText}
           value = {this.state.password}
+          secureTextEntry = {true}
           onChangeText = {(text)=> this.setState({password: text})} 
         />
         <Input 
           placeholder = {'Repeat password'}
           placeholderTextColor = {'#aeb1b3'}
-          containerStyle = {globalStyle.inputContainer}
+          containerStyle = {this.getCorrectContainerStyle(this.state.repeatPasswordError)}
           inputContainerStyle = {{
             borderBottomWidth: 0
           }}
           inputStyle = {globalStyle.inputText}
           value = {this.state.repeatPassword}
+          secureTextEntry = {true}
           onChangeText = {(text)=> this.setState({repeatPassword: text})} 
         />
         <View style = {{paddingTop: 20}}/>
@@ -68,7 +81,22 @@ class Registration extends Component {
   }
 
   register = () =>{
+    let emailError = validator('email', this.state.email);
+    let passwordError = validator('password', this.state.password);
+    let repeatPasswordError = validator('password', this.state.repeatPassword);
+    if(this.state.repeatPassword !== this.state.password){
+      passwordError = true; 
+      repeatPasswordError =  true
+    }
+    this.setState({
+      emailError: emailError, 
+      passwordError: passwordError, 
+      repeatPasswordError: repeatPasswordError
+    })
 
+    if(!emailError && !passwordError && !repeatPasswordError){
+      console.log("vse ok")
+    }
   }
 
   renderRegisterBtn = () =>{

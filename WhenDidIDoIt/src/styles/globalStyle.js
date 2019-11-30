@@ -32,6 +32,12 @@ export default StyleSheet.create({
     borderRadius: 3, 
     marginTop: 10
   }, 
+  inputContainerError: {
+    borderColor: '#8E2424', 
+    borderBottomWidth: 1,
+    borderRadius: 3, 
+    marginTop: 10
+  }, 
   inputContainerWithDate:{
     borderColor: '#e5e5e5', 
     borderBottomWidth: 1,
