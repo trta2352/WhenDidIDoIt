@@ -3,7 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity, 
+  
 } from 'react-native'
 
 import globalStyle from '../../styles/globalStyle';
@@ -11,6 +12,9 @@ import {  Input } from 'react-native-elements';
 import AddBtn from '../../components/buttons/addBtn.js'
 import colors from '../../styles/colors';
 import validator from '../../utils/validation/login_registration/validateWrapper.js'
+import FetchController from '../../utils/api/fetchController.js'
+import { USER } from '../../utils/api/apiConstants';
+import InfoAlert from '../../components/alert/infoAlert.js'
 
 class Registration extends Component {
   constructor(props) {
@@ -22,7 +26,9 @@ class Registration extends Component {
       repeatPassword: '', 
       emailError: false, 
       passwordError: false, 
-      repeatPasswordError: false
+      repeatPasswordError: false, 
+      isInfoAlertVisible: false, 
+      alertSubtitle: ''
     }
   }
 
@@ -32,6 +38,19 @@ class Registration extends Component {
     }
     else {
       return globalStyle.inputContainer
+    }
+  }
+
+  renderInfoAlert = () =>{
+    if(this.state.isInfoAlertVisible){
+      return(
+        <InfoAlert 
+          isVisible = {this.state.isInfoAlertVisible}
+          callback = {() => this.setState({isInfoAlertVisible: false})}
+          titleText = {"A problem accured"}
+          subtitleText = {this.state.alertSubtitle}
+        />
+      );
     }
   }
 
@@ -80,7 +99,7 @@ class Registration extends Component {
     );
   }
 
-  register = () =>{
+  register = async () =>{
     let emailError = validator('email', this.state.email);
     let passwordError = validator('password', this.state.password);
     let repeatPasswordError = validator('password', this.state.repeatPassword);
@@ -95,7 +114,21 @@ class Registration extends Component {
     })
 
     if(!emailError && !passwordError && !repeatPasswordError){
-      console.log("vse ok")
+      FetchController.post(USER, {email: this.state.email, password: this.state.password}).then((response) =>{
+        if(response.status == 200){
+          this.props.navigation.navigate("login");
+        }
+        else {
+          let alertSubtitle = "Check your input.";
+          if(response.status == 406){
+            alertSubtitle = "User with this email already exists."
+          }
+          this.setState({
+            isInfoAlertVisible: true,
+            alertSubtitle: alertSubtitle
+          })
+        }
+      })
     }
   }
 
@@ -122,6 +155,7 @@ class Registration extends Component {
          <TouchableOpacity style = {styles.newAccountContainer} onPress = {() => this.props.navigation.navigate('login')}>
            <Text style={[globalStyle.subtitle, {fontSize: 15, textDecorationLine: "underline"}]}>Already have an account? Login!</Text>
          </TouchableOpacity>
+         {this.renderInfoAlert()}
       </View>
     )
   }

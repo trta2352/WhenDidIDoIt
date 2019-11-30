@@ -15,6 +15,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.1",
     "@react-native-community/cameraroll": "^1.1.1",
+    "@react-native-community/netinfo": "^4.6.1",
     "appcenter": "2.5.0",
     "appcenter-analytics": "2.5.0",
     "appcenter-crashes": "2.5.0",

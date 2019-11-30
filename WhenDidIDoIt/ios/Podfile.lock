@@ -87,6 +87,8 @@ PODS:
     - React
   - react-native-image-picker (1.0.2):
     - React
+  - react-native-netinfo (4.6.1):
+    - React
   - react-native-notifications (2.1.3):
     - React
   - react-native-webview (6.7.0):
@@ -143,6 +145,7 @@ DEPENDENCIES:
   - react-native-camera (from `../node_modules/react-native-camera`)
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-notifications (from `../node_modules/react-native-notifications`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -203,6 +206,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/cameraroll"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-notifications:
     :path: "../node_modules/react-native-notifications"
   react-native-webview:
@@ -259,6 +264,7 @@ SPEC CHECKSUMS:
   react-native-camera: 8ad12cae113fd60b07236983532acc8e595c0fc3
   react-native-cameraroll: c5598e8ae3d9b3cb717bf7c696e20707ff61c6ae
   react-native-image-picker: 4c1d9b0377a3291d9b9a0e65c89e87d435e74516
+  react-native-netinfo: 16c6408c311572f17f9ffc3fa12614489307b6cf
   react-native-notifications: d2e1ad4a34fbef6ecdbedd9df5a8a2c005028362
   react-native-webview: 3277136b7cff77c70ec9224560509030f9cb6cd5
   React-RCTActionSheet: 9f71d7ae3e8fb10e08d162cbf14c621349dbfab3

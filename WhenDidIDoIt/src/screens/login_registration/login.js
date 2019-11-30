@@ -10,6 +10,10 @@ import globalStyle from '../../styles/globalStyle';
 import {  Input } from 'react-native-elements';
 import AddBtn from '../../components/buttons/addBtn.js'
 import colors from '../../styles/colors';
+import validator from '../../utils/validation/login_registration/validateWrapper.js'
+import { USER_LOGIN } from '../../utils/api/apiConstants';
+import FetchController from '../../utils/api/fetchController.js'
+import InfoAlert from '../../components/alert/infoAlert.js'
 
 class Login extends Component {
   constructor(props) {
@@ -17,7 +21,58 @@ class Login extends Component {
 
     this.state = {
       email: '', 
-      password: ''
+      password: '', 
+      emailError: false, 
+      passwordError: false, 
+      isInfoAlertVisible: false, 
+      alertSubtitle: ''
+    }
+  }
+
+  getCorrectContainerStyle = (isError) => {
+    if(isError){
+      return globalStyle.inputContainerError
+    }
+    else {
+      return globalStyle.inputContainer
+    }
+  }
+
+  renderInfoAlert = () =>{
+    if(this.state.isInfoAlertVisible){
+      return(
+        <InfoAlert 
+          isVisible = {this.state.isInfoAlertVisible}
+          callback = {() => this.setState({isInfoAlertVisible: false})}
+          titleText = {"A problem accured"}
+          subtitleText = {this.state.alertSubtitle}
+        />
+      );
+    }
+  }
+
+  login = () =>{
+    let emailError = validator('email', this.state.email);
+    let passwordError = validator('password', this.state.password);
+
+    this.setState({
+      emailError: emailError, 
+      passwordError: passwordError, 
+    })
+
+    if(!emailError && !passwordError){
+      FetchController.post(USER_LOGIN, {email: this.state.email, password: this.state.password}).then((response) =>{
+        if(response.status == 200){
+          this.props.navigation.navigate("home");
+        }
+        else {
+          let alertSubtitle = "Invalid credentials to login. Check your input.";
+          this.setState({
+            isInfoAlertVisible: true,
+            alertSubtitle: alertSubtitle
+          })
+        }
+      })
     }
   }
 
@@ -28,7 +83,7 @@ class Login extends Component {
         <Input 
           placeholder = {'email'}
           placeholderTextColor = {'#aeb1b3'}
-          containerStyle = {globalStyle.inputContainer}
+          containerStyle = {this.getCorrectContainerStyle(this.state.emailError)}
           inputContainerStyle = {{
             borderBottomWidth: 0
           }}
@@ -39,7 +94,7 @@ class Login extends Component {
         <Input 
           placeholder = {'password'}
           placeholderTextColor = {'#aeb1b3'}
-          containerStyle = {globalStyle.inputContainer}
+          containerStyle = {this.getCorrectContainerStyle(this.state.passwordError)}
           inputContainerStyle = {{
             borderBottomWidth: 0
           }}
@@ -58,7 +113,7 @@ class Login extends Component {
     return (
       <AddBtn 
         text = "LOGIN"
-        onPress = {()=> {this.cancelBtnPressed()}}
+        onPress = {this.login}
         width = {130}
         height = {40}
         textSize = {14}
@@ -74,9 +129,12 @@ class Login extends Component {
           <Text style ={[globalStyle.screeTitleStyle, {fontSize: 30}]}>When did I do It? </Text>
         </View>
         {this.renderLoginFieldsContainer()}
-         <TouchableOpacity style = {styles.newAccountContainer} onPress = {() => this.props.navigation.navigate('registration')}>
-           <Text style={[globalStyle.subtitle, {fontSize: 15, textDecorationLine: "underline"}]}>Dont have an account yet?</Text>
-         </TouchableOpacity>
+        <View style = {styles.newAccountContainer}>
+          <TouchableOpacity onPress = {() => this.props.navigation.navigate('registration')}>
+            <Text style={[globalStyle.subtitle, {fontSize: 15, textDecorationLine: "underline"}]}>Dont have an account yet?</Text>
+          </TouchableOpacity>
+        </View>
+        {this.renderInfoAlert()}
       </View>
     )
   }
