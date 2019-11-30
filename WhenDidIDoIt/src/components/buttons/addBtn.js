@@ -5,9 +5,8 @@
 */
 
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import { TouchableOpacity, Text} from 'react-native';
 import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/FontAwesome'
 
 class AddBtn extends React.Component {
 	render() {

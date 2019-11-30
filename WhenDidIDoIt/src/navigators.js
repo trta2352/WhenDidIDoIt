@@ -20,8 +20,27 @@ import images from './assets/images.js';
 import globalStyle from './styles/globalStyle.js';
 import AllTasksScreen from './screens/allTasks.js'
 
+import loginScreen from './screens/login_registration/login.js';
+import registrationScreen from './screens/login_registration/registration.js'
+
 const windowWidth = Dimensions.get("window").width;
 const tabWidth = windowWidth / 4;
+
+
+const loginRegistrationStack  = createStackNavigator(
+    {
+        login: { 
+            screen: loginScreen,
+        },
+        registration: {
+            screen: registrationScreen
+        }, 
+    },
+    {
+        initialRouteName: 'login', 
+        headerMode: 'none'
+    }
+);
 
 const homeStack = createStackNavigator(
     {
@@ -40,6 +59,7 @@ const homeStack = createStackNavigator(
         headerMode: 'none'
     }
 );
+
 const tabsNavigator = createBottomTabNavigator({
     home: { 
         screen: homeStack,
@@ -103,10 +123,11 @@ const tabsNavigator = createBottomTabNavigator({
 
 const switchStack = createSwitchNavigator(
     {
+        login: loginRegistrationStack,
         tabs: tabsNavigator
     },
     {
-        initialRouteName: 'tabs', 
+        initialRouteName: 'login', 
     }
 )
 
