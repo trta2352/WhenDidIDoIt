@@ -1,6 +1,6 @@
 import {AppRegistry} from 'react-native';
-import Navigator from './src/navigators.js';
+import App from './app.js'
 
 console.disableYellowBox = true;
 
-AppRegistry.registerComponent("WhenDidIDoIt", () => Navigator);
+AppRegistry.registerComponent("WhenDidIDoIt", () => App);

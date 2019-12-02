@@ -14,6 +14,7 @@ import validator from '../../utils/validation/login_registration/validateWrapper
 import { USER_LOGIN } from '../../utils/api/apiConstants';
 import FetchController from '../../utils/api/fetchController.js'
 import InfoAlert from '../../components/alert/infoAlert.js'
+import { inject, observer} from 'mobx-react';
 
 class Login extends Component {
   constructor(props) {
@@ -52,6 +53,8 @@ class Login extends Component {
   }
 
   login = () =>{
+    console.log("<--------------->")
+    console.log(this.props.UserStore.email)
     let emailError = validator('email', this.state.email);
     let passwordError = validator('password', this.state.password);
 
@@ -140,7 +143,7 @@ class Login extends Component {
   }
 }
 
-export default Login
+export default inject("UserStore")(observer(Login));
 
 const styles = StyleSheet.create({
   mainContainer: {
