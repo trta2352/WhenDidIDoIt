@@ -10,15 +10,14 @@ import {
 } from 'react-native'
 import Image from 'react-native-remote-svg'
 
-import AddBtn from '../components/buttons/addBtn.js'
 import Reminderlist from '../components/list/reminderList.js'
 import DBManager from '../utils/dbManager.js'
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import InfoAlert from '../components/alert/infoAlert.js'
 import globalStyle from '../styles/globalStyle.js';
-import colors from '../styles/colors.js';
 import images from '../assets/images.js';
 import SupportFun from '../utils/supportFunction.js'
+import { inject, observer } from 'mobx-react'
 
 class AllTasks extends Component {
   constructor(props) {
@@ -57,9 +56,7 @@ class AllTasks extends Component {
   }
 
   sortData = (tasks) =>{
-    console.log("sem v sortData")
     let sortedTasks = SupportFun.getSortedTasks(tasks);
-    console.log(sortedTasks);
     this.setState({
       todayTasks: sortedTasks.todays, 
       thisWeekTasks: sortedTasks.thisWeek, 
@@ -147,7 +144,7 @@ class AllTasks extends Component {
   renderTodoSection = () =>{
     return (
       <View>
-        <Text style = {globalStyle.aboveListTitle}>TODAY </Text>
+        <Text style = {globalStyle.aboveListTitle}>TODAY</Text>
         <ScrollView>
             <Reminderlist data = {this.state.todayTasks} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
           </ScrollView>
@@ -158,7 +155,7 @@ class AllTasks extends Component {
   renderNextWeekSection = () =>{
     return (
       <View>
-        <Text style = {globalStyle.aboveListTitle}>THIS WEEK </Text>
+        <Text style = {globalStyle.aboveListTitle}>THIS WEEK</Text>
         <ScrollView>
             <Reminderlist data = {this.state.thisWeekTasks} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
           </ScrollView>
@@ -243,7 +240,7 @@ class AllTasks extends Component {
             <Text style={globalStyle.mainTitleStyle}>When Did I Do It?</Text>
           </View>
           <View style={styles.rightTopContainer}>
-            <Text style = {globalStyle.screeTitleStyle}>ALL TASKS</Text>
+            <Text style = {globalStyle.screeTitleStyle}>All tasks</Text>
           </View>
         </View>
         {this.renderCorrectView()}
@@ -255,8 +252,7 @@ class AllTasks extends Component {
     )
   }
 }
-
-export default AllTasks
+export default inject("UserStore")(observer(AllTasks));
 
 const styles = StyleSheet.create({
   topContainer: {

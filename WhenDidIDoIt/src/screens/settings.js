@@ -3,206 +3,79 @@ import {
   View,
   Text,
   StyleSheet, 
-  Platform, 
-  TouchableOpacity, 
+  Platform,
+  TouchableOpacity,
   ScrollView, 
-  ActivityIndicator
 } from 'react-native'
-import Image from 'react-native-remote-svg'
 
-import AddBtn from '../components/buttons/addBtn.js'
-import Reminderlist from '../components/list/reminderList.js'
-import DBManager from '../utils/dbManager.js'
+
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import InfoAlert from '../components/alert/infoAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
 import images from '../assets/images.js';
+import LoginGateway from '../utils/localDB/loginGateway.js'
 
 class Settings extends Component {
   constructor(props) {
     super(props);
 
-    this.state={
-      data: [
-        {
-          id: 1, 
-          title: 'Clean my room', 
-          description: 'I Cleaned my room last week. It was super fun. I should do it again sooon!', 
-          whenDidIDoIt: '14.3.2019 14:00', 
-          whenShouldIDoItAgain: '14.4.2019 14:00'
-        }, 
-      ], 
-      realData: [], 
-      areYousureAlertVisible: false, 
-      missingInputVisible: false, 
-      choiceId: 0, 
-      isLoadingIndicatorVisible: true
+    this.state = {
+      areYousureAlertVisible: false
     }
   }
 
-  renderInfoAlert = () =>{
-    return (
-      <InfoAlert 
-        isVisible={this.state.missingInputVisible}
-        callback ={()=> this.setState({missingInputVisible: !this.state.missingInputVisible})}
-        titleText={"Some information about the application"}
-        subtitleText={'This application was developed as a side project. Additional information will be added here. '}
-        />
-    );
-  }
-
-  updatedData(isUpdate){
-    (async () => {
-      let temp = await DBManager.getAll()
-      if(temp != false){
-        this.setState({realData: temp})
-      }
-      else{
-        if(isUpdate){
-          this.setState({
-            realData: []
-          })
-        }
-        this.setState({
-          isLoadingIndicatorVisible: false
-        })
-      }
-    })();
-
-    
-  }
 
   renderAreYouSureAlert = () =>{
     return (
       <AreYouSureAlert 
         isVisible={this.state.areYousureAlertVisible}
         callback ={()=> this.setState({areYousureAlertVisible: !this.state.areYousureAlertVisible})}
-        choiceBtn = {(choice)=> { this.deleteItem(choice)}}
-        titleText={'REMOVE'}
+        choiceBtn = {this.areYouSureAlertChoice}
+        titleText = {'Are you sure?'}
         //subtitleText ={"Ali ste prepričani, da se želite odjaviti?"}
         leftBtnTitle = {'Cancel'}
-        rightBtnTitle = {'Remove'}
+        rightBtnTitle = {'Logout'}
         />
     );
   }
 
-  componentDidMount = () =>{
-   this.updatedData();
-    this.willFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
-      () => {
-        this.updatedData(true);
-      }
-    );
-    this.setState({isLoadingIndicatorVisible: true})
+  logoutUserFromDB = async() =>{
+    LoginGateway.logout();
   }
 
-  componentDidMount() {
-    this.willFocusSubscription.remove();
-  }
-
-  componentWillUnmount() {
-    this.willFocusSubscription.remove();
-  }
-  
-  openAddNewReminderScreen(id){
-    if(id!=-1){
-      for(var i = 0;i< this.state.realData.length;i++){
-        if (this.state.realData[i].id== id){
-          let item = this.state.realData[i];
-          this.props.navigation.navigate('AddReminder', item);    
-        }
-      }
-    }
-    else{
-      this.props.navigation.navigate('AddReminder');
-    }
-  }
-
-  renderAddNewReminderBtn(){
-    return (
-      <AddBtn 
-        text="ADD"
-        onPress = {()=> {this.openAddNewReminderScreen(-1)}}
-        width={150}
-        height={40}
-        textSize={14}
-        backgroundColor={colors.addBtnBackground}
-        textColor={colors.addBtnText}
-      />
-    );
-  }
-  renderInfoBtn(){
-    return (
-      <TouchableOpacity onPress={()=> this.setState({missingInputVisible: !this.state.missingInputVisible})}>
-        <Image source={images.info} style={{width: 25, height: 25}}/>
-      </TouchableOpacity>
-    );
-  }
-
-  renderCorrectView(){
-    if(this.state.realData.length!=0){
-      return (
-          <ScrollView>
-            <Reminderlist data={this.state.realData} deleteFunc={(id)=> this.deleteFunc(id)} editFunc={(id)=> this.editFunc(id)}/>
-          </ScrollView>
-      );
+  areYouSureAlertChoice = (choice) =>{
+    if(choice){
+      this.logoutUserFromDB();
+      this.props.navigation.navigate('login');
     }
     else {
-      if(this.state.isLoadingIndicatorVisible==true){
-        return (
-          <ActivityIndicator size="large" color="#0000ff" hidesWhenStopped={this.state.isLoadingIndicatorVisible}/>
-        );
-      }
-      else {
-        return (
-          <View style={{textAlign: 'center', justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{textAlign: 'center', fontSize: 17, color: 'black'}}>You have no saved tasks. Add new ones and they will appear here.</Text>
-          </View>
-        );
-      }
-    }
-  }
-
-  editFunc(id){
-    this.openAddNewReminderScreen(id)
-  }
-
-  deleteFunc(id){
-    this.setState({choiceId: id, areYousureAlertVisible: true})
-  }
-
-  removeFromCurrentList(){
-    for(var i= 0; i< this.state.realData.length; i++){
-      if (this.state.realData[i].id == this.state.choiceId){
-        var tempArray = this.state.realData.splice(i, 1);
-        this.setState({realData: tempArray});
-      }
-    }
-  }
-
-  deleteItem(choice){
-    this.setState({areYousureAlertVisible: false});
-    if(choice==true){
-      (async () => {
-        let temp = await DBManager.remove(this.state.choiceId)
-        if(temp){
-          this.updatedData(true)
-          this.removeFromCurrentList();
-       }
-      })();
-    }
-    else {
-      
+      this.setState({
+        areYousureAlertVisible: false
+      })
     }
   }
 
   render() {
     return (
-      <View style={globalStyle.container}>
-        <Text>Settings</Text>
+      <View style = {globalStyle.container}>
+       <View style= {styles.topContainer}>
+          <View style = {styles.leftTopContainer}>
+            <Text style = {globalStyle.mainTitleStyle}>When Did I Do It?</Text>
+          </View>
+          <View style = {styles.rightTopContainer}>
+            <Text style = {globalStyle.screeTitleStyle}>Settings</Text>
+          </View>
+        </View>
+      <View style = {{flex: 1}}>
+        <View style = {styles.bottomContainer}>
+          <TouchableOpacity style = {styles.logoutBtn} onPress = {() => {this.setState({areYousureAlertVisible: true})}}>
+            <Text style ={[globalStyle.screeTitleStyle, {paddingTop: 10, fontSize: 20}]}>Logout</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+      {this.renderAreYouSureAlert()}
+    </View>
     )
   }
 }
@@ -229,11 +102,26 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start', 
   }, 
   rightTopContainer: {
-    justifyContent: 'flex-end', 
+    flex: 1,
+    justifyContent: 'center', 
+    alignItems: 'center'
   }, 
   infoBtnStyle: {
     position: 'absolute', 
     bottom:30, 
     right: 30
+  }, 
+  bottomContainer: {
+    flex: 0.9,
+    justifyContent: 'flex-end',
+    marginBottom: 36, 
+    alignItems: 'center', 
+
+  }, 
+  logoutBtn: {
+    borderTopColor: '#7f7f7f', 
+    borderTopWidth: 1, 
+    width: '100%',
+    alignItems: 'center', 
   }
 })

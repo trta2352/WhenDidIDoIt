@@ -1,10 +1,6 @@
 import {observable, action, observer} from 'mobx';
 
 class UserStore {
-    constructor(){
-
-    }
-
     @observable email = 'asdasdasd'; 
     @observable token = ''; 
 
@@ -12,7 +8,6 @@ class UserStore {
         this.email = email;
         this.token = token;
     }
-
 }
 
 const userStore = new UserStore();

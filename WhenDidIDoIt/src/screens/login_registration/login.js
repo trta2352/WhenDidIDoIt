@@ -15,6 +15,7 @@ import { USER_LOGIN } from '../../utils/api/apiConstants';
 import FetchController from '../../utils/api/fetchController.js'
 import InfoAlert from '../../components/alert/infoAlert.js'
 import { inject, observer} from 'mobx-react';
+import loginGateway from '../../utils/localDB/loginGateway.js'
 
 class Login extends Component {
   constructor(props) {
@@ -27,6 +28,17 @@ class Login extends Component {
       passwordError: false, 
       isInfoAlertVisible: false, 
       alertSubtitle: ''
+    }
+  }
+
+  componentDidMount(){
+    this.checkIfUserIsLogedIn()
+  }
+
+  checkIfUserIsLogedIn = async () =>{
+    let userData = await loginGateway.isUserLoggedIn();
+    if(userData != false){
+      this.props.navigation.navigate("home");
     }
   }
 
@@ -53,8 +65,6 @@ class Login extends Component {
   }
 
   login = () =>{
-    console.log("<--------------->")
-    console.log(this.props.UserStore.email)
     let emailError = validator('email', this.state.email);
     let passwordError = validator('password', this.state.password);
 
@@ -66,7 +76,15 @@ class Login extends Component {
     if(!emailError && !passwordError){
       FetchController.post(USER_LOGIN, {email: this.state.email, password: this.state.password}).then((response) =>{
         if(response.status == 200){
-          this.props.navigation.navigate("home");
+          response.json().then((value) =>{
+            let userInJsonStyle = {
+              email: value.email, 
+              token: value.token
+            }
+            loginGateway.saveUserInfo(userInJsonStyle)
+            this.props.UserStore.loadingCompleted(value.email, value.token)
+            this.props.navigation.navigate("home");
+          })
         }
         else {
           let alertSubtitle = "Invalid credentials to login. Check your input.";
