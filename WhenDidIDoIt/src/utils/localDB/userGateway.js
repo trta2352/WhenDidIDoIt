@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage'
 
-const LoginGateway = {
+const UserGateway = {
     isUserLoggedIn: async function(){
         try{
             const value = await AsyncStorage.getItem('@StoreWhenDidIDoIt:loginInfo');
@@ -38,4 +38,4 @@ const LoginGateway = {
     }
 }
 
-export default LoginGateway;
+export default UserGateway;

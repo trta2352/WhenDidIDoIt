@@ -64,6 +64,7 @@ class Home extends Component {
   }
 
   addNewTask = () =>{
+    //IF THE TASK IS NEW
     if(this.state.currentEditedItem == null){
       let colors = ['#03C2FF', '#583AAE', '#FF044C', '#A20130', '#FFDF8F']; 
       let color = colors[Math.floor(Math.random() * colors.length)]
@@ -75,17 +76,14 @@ class Home extends Component {
           "title": this.state.currentNewTask, 
           "color": color
         }
-
-        console.log(taskTemplate);
-
         previousTasks.push(taskTemplate);
-
         this.setState({
           tasks: previousTasks,
           sortedTasks: previousTasks
         })
       }
     }
+    //IF WE ARE EDITING A PREVIOUS TASK
     else {
       let newArray = this.state.tasks.map((item) => {
         if (item.id == this.state.currentEditedItem.id) {
@@ -242,15 +240,15 @@ class Home extends Component {
             </View>
         )}
         renderHiddenItem = { (data, rowMap) => (
-                <View style={styles.rowBack}>
-                    <TouchableOpacity style = {{paddingRight: 10}} onPress = {() => this.editTask(data.item)}>
-                      <Icon type="feather" name ="edit-2" size = {22} color = {"#655D7D"}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress = {()=> this.removeTask(data.item)}>
-                      <Icon type="feather" name ="trash-2"  size = {22} color = {"#655D7D"}/>
-                    </TouchableOpacity>
-                </View>
-            )}
+          <View style={styles.rowBack}>
+            <TouchableOpacity style = {{paddingRight: 10}} onPress = {() => this.editTask(data.item)}>
+              <Icon type="feather" name ="edit-2" size = {22} color = {"#655D7D"}/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress = {()=> this.removeTask(data.item)}>
+              <Icon type="feather" name ="trash-2"  size = {22} color = {"#655D7D"}/>
+            </TouchableOpacity>
+          </View>
+        )}
         closeOnRowOpen ={true}
         closeOnRowBeginSwipe= {true}
         stopLeftSwipe = {true}

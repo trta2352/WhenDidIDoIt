@@ -15,7 +15,7 @@ import { USER_LOGIN } from '../../utils/api/apiConstants';
 import FetchController from '../../utils/api/fetchController.js'
 import InfoAlert from '../../components/alert/infoAlert.js'
 import { inject, observer} from 'mobx-react';
-import loginGateway from '../../utils/localDB/loginGateway.js'
+import UserGateway from '../../utils/localDB/userGateway'
 
 class Login extends Component {
   constructor(props) {
@@ -36,8 +36,8 @@ class Login extends Component {
   }
 
   checkIfUserIsLogedIn = async () =>{
-    this.props.navigation.navigate("home");
-    let userData = await loginGateway.isUserLoggedIn();
+    //this.props.navigation.navigate("home");
+    let userData = await UserGateway.isUserLoggedIn();
     if(userData != false){
       this.props.navigation.navigate("home");
     }
@@ -65,6 +65,10 @@ class Login extends Component {
     }
   }
 
+  loadTasksFromApi = () =>{
+
+  }
+
   login = () =>{
     let emailError = validator('email', this.state.email);
     let passwordError = validator('password', this.state.password);
@@ -82,8 +86,9 @@ class Login extends Component {
               email: value.email, 
               token: value.token
             }
-            loginGateway.saveUserInfo(userInJsonStyle)
-            this.props.UserStore.loadingCompleted(value.email, value.token)
+            UserGateway.saveUserInfo(userInJsonStyle)
+            this.props.userStore.loadingCompleted(value.id, value.email, value.token)
+            this.props.taskStore.loadTasksFromLocalStore()
             this.props.navigation.navigate("home");
           })
         }
@@ -162,7 +167,7 @@ class Login extends Component {
   }
 }
 
-export default inject("UserStore")(observer(Login));
+export default inject("userStore", "taskStore")(observer(Login));
 
 const styles = StyleSheet.create({
   mainContainer: {

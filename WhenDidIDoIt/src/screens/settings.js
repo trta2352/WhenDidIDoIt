@@ -14,7 +14,7 @@ import InfoAlert from '../components/alert/infoAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import colors from '../styles/colors.js';
 import images from '../assets/images.js';
-import LoginGateway from '../utils/localDB/loginGateway.js'
+import UserGateway from '../utils/localDB/userGateway'
 
 class Settings extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class Settings extends Component {
   }
 
   logoutUserFromDB = async() =>{
-    LoginGateway.logout();
+    UserGateway.logout();
   }
 
   areYouSureAlertChoice = (choice) =>{
