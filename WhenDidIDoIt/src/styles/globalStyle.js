@@ -3,10 +3,10 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
+   paddingTop: 10,
     flexDirection: 'column', 
     alignContent: 'center',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#FAFAFA'
   },
   addNewReminderPlusBtn: {
     backgroundColor: '#8E2424', 
@@ -15,10 +15,10 @@ export default StyleSheet.create({
   },
   //shown at the top of the screen
   mainTitleStyle: {
-    fontSize: 21, 
-    color: '#7f7f7f', 
+    fontSize: 29, 
+    color: '#231846', 
     fontWeight: 'bold',
-    fontFamily: 'CooperHewitt-Bold', 
+    fontFamily: 'roboto-bold', 
   }, 
   screeTitleStyle: {
     fontSize: 24, 
@@ -30,7 +30,6 @@ export default StyleSheet.create({
     borderColor: '#e5e5e5', 
     borderBottomWidth: 1,
     borderRadius: 3, 
-    marginTop: 10
   }, 
   inputContainerError: {
     borderColor: '#8E2424', 
@@ -154,5 +153,22 @@ export default StyleSheet.create({
     fontFamily: 'CooperHewitt-Medium',
     paddingTop: 5, 
     paddingBottom: 5
+  }, 
+  topContainer: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    paddingLeft: 10, 
+    paddingRight: 10, 
+    marginBottom: 20,
+    ...Platform.select({
+      ios: {
+        marginTop: 50, 
+       
+      }, 
+      android:{
+        marginTop: 20, 
+      }
+    }), 
   }
 });

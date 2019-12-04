@@ -235,12 +235,9 @@ class AllTasks extends Component {
   render() {
     return (
       <View style={globalStyle.container}>
-        <View style={styles.topContainer}>
-          <View style={styles.leftTopContainer}>
-            <Text style={globalStyle.mainTitleStyle}>When Did I Do It?</Text>
-          </View>
-          <View style={styles.rightTopContainer}>
-            <Text style = {globalStyle.screeTitleStyle}>All tasks</Text>
+       <View style= {globalStyle.topContainer}>
+          <View style = {styles.leftTopContainer}>
+            <Text style = {globalStyle.mainTitleStyle}>ALL TASKS</Text>
           </View>
         </View>
         {this.renderCorrectView()}

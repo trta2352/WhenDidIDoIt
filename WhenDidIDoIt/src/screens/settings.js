@@ -59,21 +59,18 @@ class Settings extends Component {
   render() {
     return (
       <View style = {globalStyle.container}>
-       <View style= {styles.topContainer}>
+         <View style= {globalStyle.topContainer}>
           <View style = {styles.leftTopContainer}>
-            <Text style = {globalStyle.mainTitleStyle}>When Did I Do It?</Text>
-          </View>
-          <View style = {styles.rightTopContainer}>
-            <Text style = {globalStyle.screeTitleStyle}>Settings</Text>
+            <Text style = {globalStyle.mainTitleStyle}>SETTINGS</Text>
           </View>
         </View>
-      <View style = {{flex: 1}}>
-        <View style = {styles.bottomContainer}>
-          <TouchableOpacity style = {styles.logoutBtn} onPress = {() => {this.setState({areYousureAlertVisible: true})}}>
-            <Text style ={[globalStyle.screeTitleStyle, {paddingTop: 10, fontSize: 20}]}>Logout</Text>
-          </TouchableOpacity>
+        <View style = {{flex: 1}}>
+          <View style = {styles.bottomContainer}>
+            <TouchableOpacity style = {styles.logoutBtn} onPress = {() => {this.setState({areYousureAlertVisible: true})}}>
+              <Text style ={[globalStyle.screeTitleStyle, {paddingTop: 10, fontSize: 20}]}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
       {this.renderAreYouSureAlert()}
     </View>
     )

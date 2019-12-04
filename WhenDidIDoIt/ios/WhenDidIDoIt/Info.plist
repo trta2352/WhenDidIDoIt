@@ -89,6 +89,22 @@
 		<string>CooperHewitt-SemiboldItalic.ttf</string>
 		<string>CooperHewitt-Thin.ttf</string>
 		<string>CooperHewitt-ThinItalic.ttf</string>
+		<string>roboto-black.ttf</string>
+		<string>roboto-blackitalic.ttf</string>
+		<string>roboto-bold.ttf</string>
+		<string>roboto-boldcondensed.ttf</string>
+		<string>roboto-boldcondenseditalic.ttf</string>
+		<string>roboto-bolditalic.ttf</string>
+		<string>roboto-condensed.ttf</string>
+		<string>roboto-condenseditalic.ttf</string>
+		<string>roboto-italic.ttf</string>
+		<string>roboto-light.ttf</string>
+		<string>roboto-lightitalic.ttf</string>
+		<string>roboto-medium.ttf</string>
+		<string>roboto-mediumitalic.ttf</string>
+		<string>roboto-regular.ttf</string>
+		<string>roboto-thin.ttf</string>
+		<string>roboto-thinitalic.ttf</string>
 	</array>
 </dict>
 </plist>

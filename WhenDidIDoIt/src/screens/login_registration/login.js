@@ -36,6 +36,7 @@ class Login extends Component {
   }
 
   checkIfUserIsLogedIn = async () =>{
+    this.props.navigation.navigate("home");
     let userData = await loginGateway.isUserLoggedIn();
     if(userData != false){
       this.props.navigation.navigate("home");
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
   }, 
   loginFieldContainer: {
     flexDirection: "column", 
-    width: '70%', 
+    width: '80%', 
     flex: 0.3, 
     alignItems: "center"
   }, 
