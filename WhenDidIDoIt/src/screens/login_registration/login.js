@@ -39,6 +39,10 @@ class Login extends Component {
     //this.props.navigation.navigate("home");
     let userData = await UserGateway.isUserLoggedIn();
     if(userData != false){
+      console.log("to je userData, ki sem ga naložil iz lokalne pb")
+      console.log(userData)
+      this.props.userStore.loadingCompleted(userData.id, userData.email, userData.token)
+      this.props.taskStore.loadTasksFromLocalStore()
       this.props.navigation.navigate("home");
     }
   }
@@ -84,7 +88,8 @@ class Login extends Component {
           response.json().then((value) =>{
             let userInJsonStyle = {
               email: value.email, 
-              token: value.token
+              token: value.token, 
+              id: value.id
             }
             UserGateway.saveUserInfo(userInJsonStyle)
             this.props.userStore.loadingCompleted(value.id, value.email, value.token)

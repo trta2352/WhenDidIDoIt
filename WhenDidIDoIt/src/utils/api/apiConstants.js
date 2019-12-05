@@ -4,4 +4,5 @@ export const MAIN_URL = 'http://localhost:3000/api';
 
 export const USER = '/user';
 export const USER_LOGIN = '/user/login';
-export const USER_GET_ALL_TASKS = '/user/login';
+export const TASK = '/task'
+export const USER_GET_ALL_TASK = '/task/user';

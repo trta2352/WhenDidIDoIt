@@ -95,7 +95,6 @@ const tabsNavigator = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: 'SETTINGS',
             tabBarIcon: (values) => {
-                console.log(values)
                 return (
                     <View style = {{flexDirection: 'column', alignItems: 'center'}}>
                         <Image source = {images.sliders} style = {{width: 20, height: 20}}/>

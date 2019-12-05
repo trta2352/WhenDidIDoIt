@@ -13,6 +13,8 @@ import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import InfoAlert from '../components/alert/infoAlert.js';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { inject, observer } from 'mobx-react';
+import {toJS} from 'mobx';
 
 const placeholder = {
   label: 'Select repeat interval',
@@ -30,7 +32,6 @@ class Home extends Component {
       infoAlertTitle: null, 
       infoAlertSubtitle: null,
       currentVisibleField: '',
-      tasks: [], 
       sortedTasks: [], 
       currentNewTask: '', 
       currentEditedItem: null, 
@@ -39,27 +40,8 @@ class Home extends Component {
   }
 
   componentDidMount(){
-    let tempTasks = [
-      {
-        id: 1, 
-        title: 'Pospravi sobo', 
-        color: '#583AAE'
-      }, 
-      {
-        id: 2, 
-        title: 'Pomoj posodo', 
-        color: '#FFDF8F'
-      }, 
-      {
-        id: 3, 
-        title: 'Zalij rože', 
-        color: '#FF044C'
-      }
-    ]; 
-
     this.setState({
-      tasks: tempTasks, 
-      sortedTasks: tempTasks
+      sortedTasks: []
     })
   }
 
@@ -69,44 +51,26 @@ class Home extends Component {
       let colors = ['#03C2FF', '#583AAE', '#FF044C', '#A20130', '#FFDF8F']; 
       let color = colors[Math.floor(Math.random() * colors.length)]
       if(this.state.currentNewTask != ''){
-        let previousTasks = this.state.tasks;
-        let id = previousTasks[previousTasks.length-1].id + 1
         let taskTemplate = {
-          "id": id, 
           "title": this.state.currentNewTask, 
-          "color": color
+          "color": color, 
+          "isDone": false, 
+          "taskNum": this.props.taskStore.getNewTaskId(), 
+          "fkUser": this.props.userStore.id
         }
-        previousTasks.push(taskTemplate);
-        this.setState({
-          tasks: previousTasks,
-          sortedTasks: previousTasks
-        })
+
+        this.props.taskStore.saveNewTask(taskTemplate)
       }
     }
-    //IF WE ARE EDITING A PREVIOUS TASK
+    //IF WE ARE EDITING A PREVIOUS TASK TODO
     else {
-      let newArray = this.state.tasks.map((item) => {
-        if (item.id == this.state.currentEditedItem.id) {
-          item.title = this.state.currentNewTask
-          return item
-        }
-        else {
-          return item
-        }
-      })
+      let temp = this.state.currentEditedItem;
+      temp.title = this.state.currentNewTask
+      console.log(temp)
+      console.log("------------")
+      this.props.taskStore.updateTask(temp)
 
-      let newSortedTaskArray = this.state.sortedTasks.map((item) => {
-        if (item.id == this.state.currentEditedItem.id) {
-          item.title = this.state.currentNewTask
-          return item
-        }
-        else {
-          return item
-        }
-      })
       this.setState({
-        sortedTasks: newSortedTaskArray, 
-        tasks: newArray, 
         currentEditedItem: null
       })
     }
@@ -138,34 +102,27 @@ class Home extends Component {
   }
 
   searchTroughTasks = (text) =>{
-    let searchString = text.toLowerCase();
-    let sortedTasks = this.state.tasks.filter((task) => task.title.toLowerCase().includes(searchString));
-
     this.setState({
-      sortedTasks: sortedTasks, 
       currentNewTask: text
     })
+    this.props.taskStore.sortTasks(text);
   }
 
   resetSortedTasks = () =>{
-    this.setState({
-      sortedTasks: this.state.tasks, 
-      currentNewTask: ''
-    })
+    this.props.taskStore.resetSortedTasks();
+  }
+
+  getJSobjectFromProxy = (item) =>{
+    return toJS(item)
   }
 
   removeTask = (task) =>{
-    let filteredTasksArray = this.state.tasks.filter((item) => item.id != task.id)
-    let filteredSortedArray = this.state.sortedTasks.filter((item) => item.id != task.id)
-    this.setState({
-      sortedTasks: filteredSortedArray, 
-      tasks: filteredTasksArray
-    })
+    this.props.taskStore.removeTask(this.getJSobjectFromProxy(task));
   }
 
   editTask = (task) =>{
     this.setState({
-      currentEditedItem: task, 
+      currentEditedItem: this.getJSobjectFromProxy(task), 
       currentVisibleField: 'NEW_TASK', 
       currentNewTask: task.title
     })
@@ -233,7 +190,7 @@ class Home extends Component {
     return (
       <View style = {{borderTopWidth: 1, borderColor: '#665D7E', borderRadius: 10, paddingTop: 10, marginTop: 10}}>
         <SwipeListView 
-          data = {this.state.sortedTasks}
+          data = {this.props.taskStore.sortedTasks}
           renderItem = { (data) => (
             <View style={styles.rowFront}>
               {this.renderTask(data.item)}
@@ -249,7 +206,7 @@ class Home extends Component {
             </TouchableOpacity>
           </View>
         )}
-        closeOnRowOpen ={true}
+        closeOnRowOpen = {true}
         closeOnRowBeginSwipe= {true}
         stopLeftSwipe = {true}
         rightOpenValue = {-75}
@@ -318,7 +275,7 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default inject("userStore", "taskStore")(observer(Home));
 
 const styles = StyleSheet.create({
   leftTopContainer: {

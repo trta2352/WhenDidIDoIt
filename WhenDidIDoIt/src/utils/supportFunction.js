@@ -1,7 +1,4 @@
-import {Dimensions} from 'react-native'
-
-import {NotificationsIOS} from 'react-native-notifications'
-
+import {toJS} from 'mobx';
 const SupportFun = {
     checkIfSelectedDatePassed: function(selectedDate){
         try {
@@ -89,6 +86,9 @@ const SupportFun = {
             category: "SOME_CATEGORY",
             userInfo: { }
         });*/
+    }, 
+    getJSobjectFromProxy: function (item){
+        return toJS(item)
     }
 }
 

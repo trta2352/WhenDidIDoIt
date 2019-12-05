@@ -9,6 +9,7 @@ class UserStore {
     @observable token = ''; 
 
     @action loadingCompleted(id, email, token){
+        this.id = id;
         this.email = email;
         this.token = token;
     }
