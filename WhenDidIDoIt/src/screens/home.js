@@ -3,12 +3,14 @@ import {
   View,
   Text,
   StyleSheet, 
-  Platform, 
   TouchableOpacity,
-  ScrollView, 
 } from 'react-native'
 
-import {  Input, Icon } from 'react-native-elements';
+import {
+  Input,
+  Icon, 
+  CheckBox
+} from 'react-native-elements';
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import globalStyle from '../styles/globalStyle.js';
 import InfoAlert from '../components/alert/infoAlert.js';
@@ -60,7 +62,7 @@ class Home extends Component {
         }
 
         this.props.taskStore.saveNewTask(taskTemplate)
-      }
+      } 
     }
     //IF WE ARE EDITING A PREVIOUS TASK TODO
     else {
@@ -173,19 +175,26 @@ class Home extends Component {
       );
     }
   }
-  //let colors = ['#03C2FF', '#583AAE', '#FF044C', '#A20130', '#FFDF8F']; 
 
   renderTask = (task) =>{
     return (
-      <View style ={{flexDirection: 'row', flex: 1}}>
+      <View style ={{flexDirection: 'row', flex: 1, marginBottom: -10, borderRadius: 5, borderColor: '#FAFAFA', borderWidth: 4}}>
         <View style ={{width: '2%', backgroundColor: task.color, marginRight: 20}}/>
-        <View style ={{ justifyContent: 'center'}}>
-          <Text style ={{}}>{task.title}</Text>
-        </View>
+          <View style = {{justifyContent: "center", alignContent: 'center'}}>
+            <CheckBox
+              checkedIcon='dot-circle-o'
+              uncheckedIcon='circle-o'
+              checked={task.isDone}
+              onPress = {() => {this.props.taskStore.taskWasChecked(task)}}
+            />
+          </View>
+          <View style ={{ justifyContent: 'center'}}>
+            <Text style ={{}}>{task.title}</Text>
+          </View>
       </View>
     );
   }
-
+  
   renderTasks = () =>{
     return (
       <View style = {{borderTopWidth: 1, borderColor: '#665D7E', borderRadius: 10, paddingTop: 10, marginTop: 10}}>
@@ -208,7 +217,6 @@ class Home extends Component {
         )}
         closeOnRowOpen = {true}
         closeOnRowBeginSwipe= {true}
-        stopLeftSwipe = {true}
         rightOpenValue = {-75}
       />
       </View>
@@ -235,7 +243,6 @@ class Home extends Component {
           backgroundColor: '#FFDF8F',
           borderRadius: 10, 
           padding: 5, 
-          
         }
       );
     }
@@ -291,6 +298,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     height: 50,
+    flexDirection: "row"
   },
   rowBack: {
     alignItems: 'center',

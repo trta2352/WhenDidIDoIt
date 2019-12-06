@@ -89,6 +89,13 @@ const SupportFun = {
     }, 
     getJSobjectFromProxy: function (item){
         return toJS(item)
+    }, 
+    convertTimeToString: function(datetime){
+        let date = new Date(datetime)
+
+        let newTime = this.formatDate(date);
+        
+        return newTime
     }
 }
 

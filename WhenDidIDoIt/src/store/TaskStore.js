@@ -7,6 +7,7 @@ import SupportFun from '../utils/supportFunction.js'
 class TaskStore {
     @observable tasks = [];
     @observable sortedTasks = []
+    @observable completedTasks = [];
 
     constructor(rootStore) {
         this.routerStore = rootStore;
@@ -19,20 +20,30 @@ class TaskStore {
             if(response.status == 200){
                 response.json().then((apiTasks) =>{
                     this.tasks = apiTasks;
-                    this.sortedTasks = apiTasks;
+                    this.sortedTasks = this.tasks.filter((task) => task.isDone == false)
+
+                    this.sortCompletedTasks();
                 })
             }
         })
     }
 
-    @action async saveNewTask(newTask){
+    async sortCompletedTasks (){
+        this.completedTasks = this.tasks.filter((task) => task.isDone == true)
+    }
 
-        this.tasks.push(newTask)
+    @action async saveNewTask(newTask){
+        console.log("to je new task, ki ga noter dobil")
+        console.log(newTask)
         this.sortedTasks.push(newTask)
+        this.sortedTasks  = this.sortedTasks;
+        this.tasks.push(newTask)
 
         await FetchController.post(TASK, newTask).then((response) =>{
             if(response.status == 200){
                 response.json().then((value) =>{
+                    console.log("To pa je potem vrnil strećnik")
+                    console.log(value)
                     TasksGateway.saveTasks(value)
 
                     this.tasks.pop();
@@ -45,35 +56,47 @@ class TaskStore {
         })
     }
 
-    @action async updateTask(task){
-        console.log("updateTask")
-        console.log(task)
+    @action async taskWasChecked(task) {
         let newArray = this.tasks.map((item) => {
-            if (item.id == task.id) {
-              item.title = task
+            if (item.taskNum == task.taskNum) {
+              item.isDone = true
+            }
+            return  SupportFun.getJSobjectFromProxy(item)
+        })
+       
+        let sortedFilteredArray = this.sortedTasks.filter((item) => item.taskNum != task.taskNum)
+
+        this.tasks = newArray;
+        this.sortedTasks = sortedFilteredArray;
+        this.sortCompletedTasks()
+
+        FetchController.put(TASK, task).then((response) =>{
+        })
+    }
+
+    @action async updateTask(task){
+        let newArray = this.tasks.map((item) => {
+            if (item.taskNum == task.taskNum) {
+              item.title = task.title
             }
             return  SupportFun.getJSobjectFromProxy(item)
         })
 
         let newSortedArray = this.sortedTasks.map((item) => {
-            if (item.id == task.id) {
-              item.title = task
+            if (item.taskNum == task.taskNum) {
+              item.title = task.title
             }
             return  SupportFun.getJSobjectFromProxy(item)
         })
         this.tasks = newArray;
         this.sortedTasks = newSortedArray;
 
-        console.log(newArray)
-        console.log(newSortedArray)
-
         FetchController.put(TASK, task).then((response) =>{
-            console.log("This is the response that i got from the put method")
-            console.log(response)
+
         })
     }
 
-    getNewTaskId(){
+    @action getNewTaskId(){
         if(this.tasks.length == 0){
             return 1
         }
@@ -88,11 +111,8 @@ class TaskStore {
 
         this.tasks = filteredArray;
         this.sortedTasks = sortedFilteredArray;
-        
-        console.log("this task was pressed")
-        console.log(task)
 
-        FetchHelper.delete(TASK, {"id": task.id}).then((response) =>{
+        FetchController.delete(TASK, {"id": task.id}).then((response) =>{
             console.log("well this is the response from the supposedly deleted task. But we will see how it really is");
             console.log(response)
         })

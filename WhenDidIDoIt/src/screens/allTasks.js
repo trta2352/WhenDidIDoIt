@@ -4,43 +4,20 @@ import {
   Text,
   StyleSheet, 
   Platform, 
-  TouchableOpacity, 
-  ScrollView, 
-  ActivityIndicator
 } from 'react-native'
-import Image from 'react-native-remote-svg'
 
-import Reminderlist from '../components/list/reminderList.js'
-import DBManager from '../utils/dbManager.js'
 import AreYouSureAlert from '../components/alert/areYouSureAlert.js'
 import InfoAlert from '../components/alert/infoAlert.js'
 import globalStyle from '../styles/globalStyle.js';
-import images from '../assets/images.js';
-import SupportFun from '../utils/supportFunction.js'
 import { inject, observer } from 'mobx-react'
-
+import AllTaskList from '../components/list/allTaskList.js'
 class AllTasks extends Component {
   constructor(props) {
     super(props);
 
     this.state={
-      data: [
-        {
-          id: 1, 
-          title: 'Clean my room', 
-          description: 'I Cleaned my room last week. It was super fun. I should do it again sooon!', 
-          whenDidIDoIt: '14.3.2019 14:00', 
-          whenShouldIDoItAgain: '14.4.2019 14:00'
-        }, 
-      ], 
-      realData: [], 
-      todayTasks: [], 
-      thisWeekTasks: [], 
-      laterTasks: [], 
       areYousureAlertVisible: false, 
       missingInputVisible: false, 
-      choiceId: 0, 
-      isLoadingIndicatorVisible: true
     }
   }
 
@@ -53,37 +30,6 @@ class AllTasks extends Component {
         subtitleText={'This application was developed as a side project. Additional information will be added here. '}
         />
     );
-  }
-
-  sortData = (tasks) =>{
-    let sortedTasks = SupportFun.getSortedTasks(tasks);
-    this.setState({
-      todayTasks: sortedTasks.todays, 
-      thisWeekTasks: sortedTasks.thisWeek, 
-      laterTasks: sortedTasks.later, 
-    })
-  }
-
-  updatedData(isUpdate){
-    (async () => {
-      let temp = await DBManager.getAll()
-      this.sortData(temp)
-      if(temp != false){
-        this.setState({realData: temp})
-      }
-      else{
-        if(isUpdate){
-          this.setState({
-            realData: []
-          })
-        }
-        this.setState({
-          isLoadingIndicatorVisible: false
-        })
-      }
-    })();
-
-    
   }
 
   renderAreYouSureAlert = () =>{
@@ -100,147 +46,26 @@ class AllTasks extends Component {
     );
   }
 
-  componentDidMount = () =>{
-   this.updatedData();
-    this.willFocusSubscription = this.props.navigation.addListener(
-      'willFocus',
-      () => {
-        this.updatedData(true);
-      }
-    );
-    this.setState({isLoadingIndicatorVisible: true})
-  }
-
-  componentDidMount() {
-    this.willFocusSubscription.remove();
-  }
-
-  componentWillUnmount() {
-    this.willFocusSubscription.remove();
-  }
-  
-  openAddNewReminderScreen(id){
-    if(id!=-1){
-      for(var i = 0;i< this.state.realData.length;i++){
-        if (this.state.realData[i].id== id){
-          let item = this.state.realData[i];
-          this.props.navigation.navigate('AddReminder', item);    
-        }
-      }
-    }
-    else{
-      this.props.navigation.navigate('AddReminder');
-    }
-  }
-
-  renderAddNewReminderBtn(){
+  renderAllTaskList = () =>{
     return (
-      <TouchableOpacity onPress={()=> this.openAddNewReminderScreen(-1)} style={globalStyle.addNewReminderPlusBtn}>
-        <Image source={images.plus} style={{width: 40, height: 40}}/>
-      </TouchableOpacity>
+      <AllTaskList 
+        data = {this.props.taskStore.completedTasks}
+      />
     );
-  }
-
-  renderTodoSection = () =>{
-    return (
-      <View>
-        <Text style = {globalStyle.aboveListTitle}>TODAY</Text>
-        <ScrollView>
-            <Reminderlist data = {this.state.todayTasks} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
-          </ScrollView>
-      </View>
-    );
-  }
-
-  renderNextWeekSection = () =>{
-    return (
-      <View>
-        <Text style = {globalStyle.aboveListTitle}>THIS WEEK</Text>
-        <ScrollView>
-            <Reminderlist data = {this.state.thisWeekTasks} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
-          </ScrollView>
-      </View>
-    );
-  }
-
-  renderOtherSection = () =>{
-    return (
-      <View>
-        <Text style = {globalStyle.aboveListTitle}>LATER</Text>
-        <ScrollView>
-            <Reminderlist data = {this.state.laterTasks} deleteFunc = {(id)=> this.deleteFunc(id)} editFunc = {(id)=> this.editFunc(id)}/>
-          </ScrollView>
-      </View>
-    );
-  }
-
-  renderCorrectView(){
-    if(this.state.realData.length != 0){
-      return (
-        <ScrollView>
-          {this.renderTodoSection()}
-          {this.renderNextWeekSection()}
-          {this.renderOtherSection()}
-        </ScrollView>
-      );
-    }
-    else {
-      if(this.state.isLoadingIndicatorVisible == true){
-        return (
-          <ActivityIndicator size = "large" color = {'#064c5d'} hidesWhenStopped = {this.state.isLoadingIndicatorVisible}/>
-        );
-      }
-      else {
-        return (
-          <View style = {{textAlign: 'center', justifyContent: 'center', alignItems: 'center'}}>
-            <Text style = {{textAlign: 'center', fontSize: 17, color: 'black'}}>You have no saved tasks. Add new ones and they will appear here.</Text>
-          </View>
-        );
-      }
-    }
-  }
-
-  editFunc(id){
-    this.openAddNewReminderScreen(id)
-  }
-
-  deleteFunc(id){
-    this.setState({choiceId: id, areYousureAlertVisible: true})
-  }
-
-  removeFromCurrentList(){
-    for(var i= 0; i< this.state.realData.length; i++){
-      if (this.state.realData[i].id == this.state.choiceId){
-        var tempArray = this.state.realData.splice(i, 1);
-        this.setState({realData: tempArray});
-      }
-    }
-  }
-
-  deleteItem(choice){
-    this.setState({areYousureAlertVisible: false});
-    if(choice==true){
-      (async () => {
-        let temp = await DBManager.remove(this.state.choiceId)
-        if(temp){
-          this.updatedData(true)
-          this.removeFromCurrentList();
-       }
-      })();
-    }
-    else {
-    }
   }
 
   render() {
     return (
       <View style={globalStyle.container}>
-       <View style= {globalStyle.topContainer}>
+        <View style= {globalStyle.topContainer}>
           <View style = {styles.leftTopContainer}>
             <Text style = {globalStyle.mainTitleStyle}>ALL TASKS</Text>
           </View>
         </View>
-        {this.renderCorrectView()}
+        <View style = {{marginLeft: 10, marginRight: 10, flex: 1}}>
+          {this.renderAllTaskList()}
+        </View>
+
         <View style = {styles.infoBtnStyle}>    
           {this.renderAreYouSureAlert()}
           {this.renderInfoAlert()}
@@ -249,7 +74,7 @@ class AllTasks extends Component {
     )
   }
 }
-export default inject("UserStore")(observer(AllTasks));
+export default inject("userStore", "taskStore")(observer(AllTasks));
 
 const styles = StyleSheet.create({
   topContainer: {

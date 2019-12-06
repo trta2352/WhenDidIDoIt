@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-   paddingTop: 10,
+    paddingTop: 10,
     flexDirection: 'column', 
     alignContent: 'center',
     backgroundColor: '#FAFAFA'
@@ -149,7 +149,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.2
   }, 
   tabLabel:{
-    color: 'black', 
+    color: '#251947', 
     fontFamily: 'CooperHewitt-Medium',
     paddingTop: 5, 
     paddingBottom: 5

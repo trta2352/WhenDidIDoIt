@@ -21,6 +21,7 @@ import AllTasksScreen from './screens/allTasks.js'
 
 import loginScreen from './screens/login_registration/login.js';
 import registrationScreen from './screens/login_registration/registration.js'
+import { Icon } from 'react-native-elements';
 
 const windowWidth = Dimensions.get("window").width;
 const tabWidth = windowWidth / 4;
@@ -67,8 +68,8 @@ const tabsNavigator = createBottomTabNavigator({
             tabBarIcon: (values) => {
                 return (
                     <View style = {{flexDirection: 'column', alignItems: 'center'}}>
-                        <Image source={images.home} style={{width: 20, height: 20}}/>
-                        <Text style = {globalStyle.tabLabel}>ADD</Text>
+                        <Icon type="feather" name = "check-circle" color = {"#251947"} style = {{width: 20, height: 20}}/>
+                        <Text style = {globalStyle.tabLabel}>TODO</Text>
                         <View style={{width: 5, height: 5, borderRadius: 20, backgroundColor: values.tintColor}}></View>
                     </View>
                 )
@@ -82,7 +83,7 @@ const tabsNavigator = createBottomTabNavigator({
             tabBarIcon: (values) => {
                 return (
                     <View style = {{flexDirection: 'column', alignItems: 'center'}}>
-                        <Image source={images.archive} style={{width: 20, height: 20}}/>
+                          <Icon type="feather" name = "archive" color = {"#251947"} style = {{width: 20, height: 20}}/>
                         <Text style = {globalStyle.tabLabel}>ALL TASKS</Text>
                         <View style={{width: 5, height: 5, borderRadius: 20, backgroundColor: values.tintColor}}></View>
                     </View>
@@ -97,7 +98,7 @@ const tabsNavigator = createBottomTabNavigator({
             tabBarIcon: (values) => {
                 return (
                     <View style = {{flexDirection: 'column', alignItems: 'center'}}>
-                        <Image source = {images.sliders} style = {{width: 20, height: 20}}/>
+                        <Icon type="feather" name = "settings" color = {"#251947"} style = {{width: 20, height: 20}}/>
                         <Text style = {globalStyle.tabLabel}>SETTINGS</Text>
                         <View style={{width: 5, height: 5, borderRadius: 20, backgroundColor: values.tintColor}}></View>
                     </View>
